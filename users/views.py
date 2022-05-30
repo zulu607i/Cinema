@@ -28,7 +28,6 @@ def activate_user_profile(request, uidb64, token):
         # if valid set active true
         user.is_active = True
         # set signup_confirmation true
-        user.userprofile.is_verified = True
         user.save()
         login(request, user)
         return redirect('home')
@@ -43,7 +42,6 @@ def register_view(request):
         user.refresh_from_db()
         user.userprofile.first_name = form.cleaned_data.get('first_name')
         user.userprofile.last_name = form.cleaned_data.get('last_name')
-        user.userprofile.email = form.cleaned_data.get('email')
         user.is_active = False
         user.save()
         current_domain = get_current_site(request)
@@ -60,7 +58,7 @@ def register_view(request):
         send_mail('Please Activate Your Account',
                   message,
                   EMAIL_HOST,
-                  [f'{user.userprofile.email}']
+                  [f'{user.email}']
                   )
 
         return redirect('home')
@@ -74,7 +72,7 @@ def loginPage(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=str(username), password=str(password))
-        if user is not None and user.userprofile.is_verified == True or user.is_superuser:
+        if user is not None and user.is_active == True or user.is_superuser:
             login(request, user)
             return redirect('home')
 

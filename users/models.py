@@ -9,9 +9,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="User")
     first_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100, blank=True)
-    email = models.EmailField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created at")
-    is_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
