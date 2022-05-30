@@ -72,9 +72,15 @@ def loginPage(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=str(username), password=str(password))
-        if user is not None and user.is_active == True or user.is_superuser:
-            login(request, user)
-            return redirect('home')
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect('home')
+            elif user.is_superuser:
+                login(request, user)
+                return redirect('home')
+        else:
+            return render(request, 'users/404.html')
 
     return render(request, 'users/login.html')
 
