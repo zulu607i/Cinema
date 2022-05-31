@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ui',
     'users',
     'crispy_forms',
+    'movies',
 
 ]
 
@@ -148,3 +149,4 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS", default="")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 
+IMDB_URL = 'https://www.imdb.com/title/'
