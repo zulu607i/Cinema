@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'crispy_forms',
     'movies',
+    'locations',
 
 ]
 
@@ -149,7 +150,3 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS", default="")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 
-IMDB_URL = 'https://www.imdb.com/title/'
-
-MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'images/')
