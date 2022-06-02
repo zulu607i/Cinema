@@ -1,0 +1,28 @@
+{% block content %}
+<div class="jumbotron text-center">
+  <h1>My First Bootstrap Page</h1>
+  <p>Resize this responsive page to see the effect!</p>
+</div>
+<section class="py-5 border-top-1">
+  <div class="container">
+    <div class="row justify-content-lg-center text-center mb-3">
+      {% for movie in movies %}
+      <div class="col-lg-6 mb-3">
+         <div class="card">
+           <div class="col-lg-4 align-self-center">
+             <a href="single.html">
+               <img src="{{ movie.poster }}" class="img-fluid" alt="">
+             </a>
+          </div>
+         <div class="card-body">
+           <h4 class="card-title">{{ movie.name }}</h4>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+        {% include 'homepage/partials/pagination.html' %}
+  </div>
+</section>
+
+{% endblock %}
