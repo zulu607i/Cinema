@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ui',
     'users',
     'crispy_forms',
+    'locations',
 
 ]
 
