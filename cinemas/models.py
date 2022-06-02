@@ -24,7 +24,7 @@ class MovieTheater(models.Model):
     name = models.CharField(max_length=200, unique=True)
     county = models.ForeignKey(County, null=True, on_delete=models.SET_NULL)
     city = models.ForeignKey(City, null=True, on_delete=models.SET_NULL)
-    Street = models.ForeignKey(Street, null=True, on_delete=models.SET_NULL)
+    street = models.ForeignKey(Street, null=True, on_delete=models.SET_NULL)
     halls = models.ManyToManyField(Hall)
 
     def __str__(self):
