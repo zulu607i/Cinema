@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path('home/', include('ui.urls')),
     path('auth/', include('users.urls')),
-    path('', include('reservation.urls')),
+    path('reservations/', include('reservation.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL,
                       document_root=settings.MEDIA_ROOT)
