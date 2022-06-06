@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section class="login py-5 border-top-1">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-8 align-item-center">
+                <div class="border border">
+                    <h3 class="bg-gray p-4">Contact us!</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <fieldset class="p-4">
+                            <div class="col-lg-12">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+
+                            <div class="col-lg-12">
+                                {{ form.subject|as_crispy_field }}
+                            </div>
+
+                            <div class="col-12">
+                                {{ form.message|as_crispy_field }}
+                            </div>
+                            <button type="submit" class="d-block py-3 px-4 bg-primary text-white border-0 rounded font-weight-bold">Register Now</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
