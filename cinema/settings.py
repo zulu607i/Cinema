@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'movies',
     'locations',
-    'cinemas'
+    'cinemas',
+    'reservation'
 
 ]
 
@@ -87,7 +88,7 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'cinema_app',
+        'NAME': 'cinema_app_2',
 
         'USER': 'postgres',
 
@@ -155,3 +156,5 @@ IMDB_URL = 'https://www.imdb.com/title/'
 
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'images/')
+
+LOGIN_URL = 'login'

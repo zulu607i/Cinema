@@ -11,12 +11,14 @@
          <div class="card">
            <div class="col-lg-4 align-self-center">
              <a href="single.html">
-               <img src="{{ movie.poster }}" class="img-fluid" alt="">
+               <img src="{{ movie.poster.url }}" class="img-fluid" alt="">
              </a>
           </div>
          <div class="card-body">
            <h4 class="card-title">{{ movie.name }}</h4>
+             <a href="{% url 'reserve' pk=movie.pk %}">Book a ticket</a>
           </div>
+
         </div>
       </div>
       {% endfor %}

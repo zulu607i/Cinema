@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.functional import cached_property
 from cinema import settings
+from cinemas.models import Hall
+from datetime import timedelta
 
 # Create your models here.
 
@@ -22,6 +24,7 @@ class Movie(models.Model):
     @cached_property
     def get_imdb_url(self):
         return f'{settings.IMDB_URL}{self.imdb_id}'
+
 
 
 
