@@ -88,7 +88,7 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'cinema_app',
+        'NAME': 'cinema_app_2',
 
         'USER': 'postgres',
 

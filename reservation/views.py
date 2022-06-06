@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from cinemas.models import Seat
 # Create your views here.
 
+
 @login_required()
 def book_a_ticket(request, pk):
     movie = Movie.objects.get(pk=pk)
@@ -15,15 +16,11 @@ def book_a_ticket(request, pk):
         reservation = form.save()
         reservation.user = request.user
         reservation.movie = movie
-        reservation.date = movie.date_scheduled_at
-        reservation.hour = movie.time_scheduled_at
-        seat_object = Seat.objects.get(pk=reservation.seat.pk)
-        seat_object.is_reserved = True
         reservation.save()
-        seat_object.save()
 
         message = f'Hi,{reservation.user}! Your reservation with ID {reservation.pk} has been created. ' \
-                  f'Movie: {reservation.movie}, on {reservation.date} at {reservation.hour} in {movie.hall_is_playing}, seat {reservation.seat}'
+                  f'Movie: {reservation.movie}, on {reservation.playing_time.start_time} in' \
+                  f' {reservation.playing_time.assigned_hall}, seat {reservation.seat} at {reservation.playing_time.assigned_hall.movie_theater}'
         send_mail(f'You booked a ticket for {reservation.movie}',
                   message,
                   EMAIL_HOST,

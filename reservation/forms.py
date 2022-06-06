@@ -7,7 +7,7 @@ class ReservationForm(forms.ModelForm):
 
     class Meta:
         model = Reservation
-        fields = ['seat', 'movie_theater']
+        fields = ['seat', 'playing_time']
         unique_together = (
             ['user', 'seat']
         )
