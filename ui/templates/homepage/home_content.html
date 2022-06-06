@@ -16,7 +16,9 @@
           </div>
          <div class="card-body">
            <h4 class="card-title">{{ movie.name }}</h4>
+             <a href="{% url 'reserve' pk=movie.pk %}">Book a ticket</a>
           </div>
+
         </div>
       </div>
       {% endfor %}

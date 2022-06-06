@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'movies',
     'locations',
-    'cinemas'
+    'cinemas',
+    'reservation'
 
 ]
 
@@ -155,3 +156,5 @@ IMDB_URL = 'https://www.imdb.com/title/'
 
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'images/')
+
+LOGIN_URL = 'login'
