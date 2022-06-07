@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from movies.models import Movie
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import *
+from cinema.settings import EMAIL_HOST_USER, EMAIL_HOST
 from cinema.settings import EMAIL_HOST_USER
 from ratelimit.decorators import ratelimit
 # Create your views here.
@@ -24,18 +25,20 @@ def homepage(request):
 
 @ratelimit(key="ip", rate="30/m", block=True)
 def contact_form(request):
-    if request.method == 'GET':
-        form = ContactForm()
-    else:
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data('email')
-            subject = form.cleaned_data('subject')
-            message = form.cleaned_data('message')
-            send_mail(
-                subject, message, email, EMAIL_HOST_USER
-            )
-            return redirect('home')
+    form = ContactForm(request.POST)
+    if form.is_valid():
+        contact = form.save()
+
+        email_message = f'Name: {contact.name} \n ' \
+                        f'Phone: {contact.phone_number} \n ' \
+                        f'Email: {contact.email} \n' \
+                        f'City: {contact.city}\n' \
+                        f'Cinema: {contact.cinema} \n' \
+                        f'Message: {contact.message}'
+        send_mail(
+            contact.subject, email_message, EMAIL_HOST, [EMAIL_HOST_USER]
+        )
+        return redirect('home')
 
     return render(request, 'contact_form.html', {'form': form})
 
