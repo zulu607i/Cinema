@@ -4,9 +4,12 @@ from movies.models import Movie
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import *
 from cinema.settings import EMAIL_HOST_USER, EMAIL_HOST
+from cinema.settings import EMAIL_HOST_USER
+from ratelimit.decorators import ratelimit
 # Create your views here.
 
 
+@ratelimit(key="ip", rate="30/m", block=True)
 def homepage(request):
     movies = Movie.objects.filter(is_scheduled=True)
     paginator = Paginator(movies, 4)
@@ -20,6 +23,7 @@ def homepage(request):
     return render(request, "base.html", {"movies": movies_paginated})
 
 
+@ratelimit(key="ip", rate="30/m", block=True)
 def contact_form(request):
     form = ContactForm(request.POST)
     if form.is_valid():

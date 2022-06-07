@@ -10,6 +10,8 @@ from cinema.settings import EMAIL_HOST
 from .forms import SignUpForm
 from .tokens import generate_token
 from django.contrib.auth.models import User
+from ratelimit.decorators import ratelimit
+
 # Create your views here.
 
 
@@ -35,6 +37,7 @@ def activate_user_profile(request, uidb64, token):
         return render(request, 'users/partials/activation_invalid.html')
 
 
+@ratelimit(key="ip", rate="30/m", block=True)
 def register_view(request):
     form = SignUpForm(request.POST)
     if form.is_valid():
@@ -67,6 +70,7 @@ def register_view(request):
 
     return render(request, 'users/sign_up.html', {'form': form})
 
+@ratelimit(key="ip", rate="30/m", block=True)
 def loginPage(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -85,6 +89,7 @@ def loginPage(request):
     return render(request, 'users/login.html')
 
 
+@ratelimit(key="ip", rate="30/m", block=True)
 def logoutPage(request):
     logout(request)
     return redirect('home')
