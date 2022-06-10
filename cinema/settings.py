@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'reservation',
     'contact',
     'nested_inline'
+    'django_filters',
 
 ]
 
