@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'cinemas',
     'reservation',
     'contact',
+    'nested_inline'
     'django_filters',
 
 ]
@@ -148,11 +149,11 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_PORT = env("EMAIL_PORT")
-EMAIL_USE_TLS = env("EMAIL_USE_TLS")
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_HOST = env("EMAIL_HOST", default="")
+EMAIL_PORT = env("EMAIL_PORT", default="")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS", default="")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 
 IMDB_URL = 'https://www.imdb.com/title/'
 

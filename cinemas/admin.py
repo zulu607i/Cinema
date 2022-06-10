@@ -1,18 +1,28 @@
 from django.contrib import admin
 from .models import *
+from nested_inline.admin import NestedTabularInline, NestedModelAdmin
 # Register your models here.
 
 
-class HallAdmin(admin.ModelAdmin):
-    list_display = ['name', 'movie_theater']
+class SeatInline(NestedTabularInline):
+    model = Seat
+    extra = 0
 
 
+class HallInline(NestedTabularInline):
+    model = Hall
+    extra = 0
+    inlines = (SeatInline,)
 
 
-class AdminSeat(admin.ModelAdmin):
-    list_display = ['pk', 'seat_row', 'seat_nr', 'halls']
+@admin.register(MovieTheater)
+class CinemaAdmin(NestedModelAdmin):
+    inlines = (HallInline,)
 
 
-admin.site.register(Seat, AdminSeat)
-admin.site.register(Hall, HallAdmin)
-admin.site.register(MovieTheater)
+@admin.register(Hall)
+class HallAdmin(NestedModelAdmin):
+    inlines = (SeatInline,)
+
+
+admin.site.register(Seat)
