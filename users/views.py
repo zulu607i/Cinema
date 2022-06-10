@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
-from cinema.settings import EMAIL_HOST
+from cinema.settings import EMAIL_HOST_USER
 from .forms import SignUpForm
 from .tokens import generate_token
 from django.contrib.auth.models import User
@@ -60,7 +60,7 @@ def register_view(request):
         print(message)
         send_mail('Please Activate Your Account',
                   message,
-                  EMAIL_HOST,
+                  EMAIL_HOST_USER,
                   [f'{user.email}']
                   )
 

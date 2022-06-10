@@ -1,30 +1,57 @@
 {% block content %}
-<div class="jumbotron text-center">
-  <h1>My First Bootstrap Page</h1>
-  <p>Resize this responsive page to see the effect!</p>
-</div>
+<section class="page-search">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- Advance Search -->
+				<div class="advance-search">
+					<form>
+						<div class="form-row">
+							<div class="form-group col-md-4">
+								{{ filter.form.assigned_hall}}
+							</div>
+							<div class="form-group col-md-4">
+								{{ filter.form.assigned_movie}}
+							</div>
+							<div class="form-group col-4">
+								<button type="submit" class="btn btn-primary">Search Now</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 <section class="py-5 border-top-1">
   <div class="container">
-    <div class="row justify-content-lg-center text-center mb-3">
+  <div class="row justify-content-sm-center">
+      <div class="row">
       {% for movie in movies %}
-      <div class="col-lg-6 mb-3">
-         <div class="card">
-           <div class="col-lg-4 align-self-center">
-             <a href="single.html">
-               <img src="{{ movie.poster.url }}" class="img-fluid" alt="">
-             </a>
-          </div>
-         <div class="card-body">
-           <h4 class="card-title">{{ movie.name }}</h4>
-             <a href="{% url 'reserve' pk=movie.pk %}">Book a ticket</a>
-          </div>
-
+      <div class="col-sm-4 mb-3">
+         <div class="card" style="background-color: black;">
+            <div class="col-sm-4 align-self-center">
+                <br>
+                <a href="single.html">
+                    <img src="{{ movie.assigned_movie.poster.url }}" class="img-fluid" alt="">
+                </a>
+            </div>
+            <div class="card-body" style="width: 100%">
+                <h4 class="card-title" style="color: white;">{{ movie.assigned_movie }}</h4>
+                <a href="{% url 'reserve' pk=movie.assigned_movie.pk hall_pk=movie.assigned_hall.pk %}" style="color: grey;">Book a ticket at {{movie.assigned_hall.movie_theater}}
+                    in {{ movie.assigned_hall }} at {{ movie.get_time }}</a>
+            </div>
+            <div class="card-body" style="width: 50% float:right;">
+                <p class="card-title" style="color: white; float: right;">You can see it in: {{ movie.get_date }}</p><br>
+            </div>
         </div>
       </div>
       {% endfor %}
+      </div>
     </div>
         {% include 'homepage/partials/pagination.html' %}
   </div>
+
 </section>
 
 {% endblock %}
