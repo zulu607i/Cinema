@@ -1,25 +1,25 @@
-    <div class="row justify-content-md-center text-center mb-3">
+    <div class="row justify-content-md-center text-center mb-3" >
       <div class="col-lg-4"><nav aria-label="...">
         <ul class="pagination">
              {% if movies.has_previous %}
           <li class="page-item">
-             <a class="page-link" href="?page={{movies.previous_page_number}}">Previous</a>
+             <a style="color: white; background: black;" class="page-link" href="?page={{movies.previous_page_number}}">Previous</a>
           </li>
               {% else %}
           <li class="page-item">
-            <a class="page-link" href="#">Previous</a>
+            <a style="color: white; background: black;" class="page-link" href="#">Previous</a>
           </li>
             {% endif %}
           <li class="page-item">
-            <a class="page-link" href="?page={{movies.get_page}}">{{movies.number}}</a>
+            <a style="color: white; background: black;" class="page-link" href="?page={{movies.get_page}}">{{movies.number}}</a>
           </li>
             {% if movies.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?page={{movies.next_page_number}}">Next</a>
+            <a style="color: white; background: black;" class="page-link" href="?page={{movies.next_page_number}}">Next</a>
           </li>
           {% else %}
           <li class="page-item">
-            <a class="page-link" href="#">Next</a>
+            <a style="color: white; background: black;" class="page-link" href="#">Next</a>
           </li>
             {% endif %}
         </ul>

@@ -27,14 +27,13 @@ class Hall(models.Model):
 
 
 class Seat(models.Model):
-    seat_nr = models.CharField(max_length=10, unique=True)
+    seat_nr = models.CharField(max_length=10)
     seat_row = models.CharField(max_length=10, default='')
     is_reserved = models.BooleanField(default=False)
     halls = models.ForeignKey(Hall, null=True, on_delete=models.SET_NULL)
 
+    class Meta:
+        unique_together = ['seat_nr', 'halls']
+
     def __str__(self):
         return f'{self.seat_row} {self.seat_nr}'
-
-
-
-
