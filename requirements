@@ -6,6 +6,10 @@ dill==0.3.5.1
 Django==4.0.4
 django-crispy-forms==1.14.0
 django-environ==0.8.1
+django-filter==21.1
+django-nested-inline==0.4.5
+django-ratelimit==3.0.1
+django-widget-tweaks==1.4.12
 isort==5.10.1
 lazy-object-proxy==1.7.1
 mccabe==0.7.0
@@ -15,8 +19,8 @@ psycopg2==2.9.3
 pylint==2.13.9
 six==1.16.0
 sqlparse==0.4.2
+tabulate==0.8.9
 tomli==2.0.1
 typing-extensions==4.2.0
 tzdata==2022.1
 wrapt==1.14.1
-django-ratelimit==3.0.1
