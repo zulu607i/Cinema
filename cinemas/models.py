@@ -3,11 +3,6 @@ from locations.models import County, City, Street
 # Create your models here.
 
 
-from django.db import models
-from locations.models import County, City, Street
-# Create your models here.
-
-
 class MovieTheater(models.Model):
     name = models.CharField(max_length=200, unique=True)
     county = models.ForeignKey(County, null=True, on_delete=models.SET_NULL)

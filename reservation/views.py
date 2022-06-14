@@ -1,11 +1,14 @@
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from reservation.models import Reservation
 from .forms import ReservationForm
 from movies.models import Movie
 from cinema.settings import EMAIL_HOST_USER
 from django.contrib.auth.decorators import login_required
-from reservation.models import PlayingTime
-from cinemas.models import Seat, Hall
+from cinemas.models import Hall
+import csv
 # Create your views here.
 
 
@@ -33,4 +36,26 @@ def book_a_ticket(request, pk, hall_pk):
         return redirect('home')
 
     return render(request, 'reservation/reserve.html', {'form': form,})
+
+def get_csv_file(request, pk):
+    user = User.objects.get(pk=pk)
+    reservations = Reservation.objects.filter(user=request.user)
+
+    if request.method == "POST":
+        response = HttpResponse(content_type='text/csv')
+        response['Content=-Disposition'] = f'attachment; filename=reservation_{user.username}.csv'
+        writer = csv.writer(response)
+        writer.writerow(['ID', 'User', 'Hall', 'Movie', 'Seat', 'Start time'])
+        for r in reservations:
+
+            writer.writerow([r.pk,
+                             r.user,
+                             r.playing_time.assigned_hall,
+                             r.playing_time.assigned_movie,
+                             r.seat,
+                             r.playing_time.start_time])
+
+        return response
+
+    return render(request, 'reservation/user_reservation.html', {'reservations': reservations})
 
