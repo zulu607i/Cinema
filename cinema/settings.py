@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'cinemas',
     'reservation',
     'contact',
-    'nested_inline'
+    'nested_inline',
     'django_filters',
 
 ]
