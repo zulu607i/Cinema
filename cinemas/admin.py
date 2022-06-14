@@ -1,8 +1,11 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
+
 from .models import *
 from nested_inline.admin import NestedTabularInline, NestedModelAdmin
-# Register your models here.
+from django import forms
 
+# Register your models here.
 
 class SeatInline(NestedTabularInline):
     model = Seat
@@ -15,6 +18,7 @@ class HallInline(NestedTabularInline):
     inlines = (SeatInline,)
 
 
+
 @admin.register(MovieTheater)
 class CinemaAdmin(NestedModelAdmin):
     inlines = (HallInline,)
@@ -23,6 +27,7 @@ class CinemaAdmin(NestedModelAdmin):
 @admin.register(Hall)
 class HallAdmin(NestedModelAdmin):
     inlines = (SeatInline,)
+
 
 
 admin.site.register(Seat)
