@@ -7,7 +7,7 @@ from .models import *
 
 class SeatGenerationTest(TestCase):
     def test_gs(self):
-        gs = generate_seat(1, 1)
+        gs = generate_seat(2, 2)
         self.assertTrue(
-            ['1A', '2A'], [seat.seat_name for seat in gs]
+            ["1A", "2A", "1B", "2B"], [seat.seat_name for seat in gs]
         )
