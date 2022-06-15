@@ -17,6 +17,7 @@
             <th>Movie</th>
             <th>Start time</th>
             <th>Seat</th>
+            <th>Is confirmed</th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +29,7 @@
             <td>{{r.playing_time.assigned_movie}}</td>
             <td>{{ r.playing_time.get_date}} at {{ r.playing_time.get_time}}</td>
             <td>{{ r.seat.seat_name}} </td>
+             <td>{{ r.is_confirmed}} </td>
         </tr>
     {% endfor %}
     </tbody>
