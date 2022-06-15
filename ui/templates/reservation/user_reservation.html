@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{%block content%}
+<br>
+<div class="container py-2">
+<div class="h1 text-center text-white">
+    Your reservations
+</div>
+</div>
+<div class="container">
+<table class="table table-sm table-bordered border-primary">
+    <thead class="table-primary">
+        <tr>
+            <th>Reservation ID</th>
+            <th>User</th>
+            <th>Hall</th>
+            <th>Movie</th>
+            <th>Start time</th>
+            <th>Seat</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for r in reservations %}
+        <tr style="color: white; background: black;">
+            <th scope="row">{{r.id}}</th>
+            <td>{{r.user }}</td>
+            <td>{{r.playing_time.assigned_hall }}</td>
+            <td>{{r.playing_time.assigned_movie}}</td>
+            <td>{{ r.playing_time.get_date}} at {{ r.playing_time.get_time}}</td>
+            <td>{{ r.seat.seat_name}} </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<form method="POST">
+    {% csrf_token %}
+    <div class="text-center">
+        <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0">
+            <span class="d-flex align-items-center">
+                <i class="bi-chat-text-fill me-2"></i>
+                <span class="small">Download reservations</span>
+            </span>
+        </button>
+    </div>
+    <br>
+</form>
+</div>
+{%endblock%}
