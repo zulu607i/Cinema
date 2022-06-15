@@ -1,5 +1,8 @@
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
+from django.views.generic import DetailView
+
+from movies.models import Movie
 from reservation.models import PlayingTime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import *
@@ -47,4 +50,6 @@ def contact_form(request):
 
     return render(request, 'contact_form.html', {'form': form})
 
-
+class MovieDetailView(DetailView):
+    model = Movie
+    template_name = 'movies/details.html'
