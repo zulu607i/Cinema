@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="container">
+	<div class="container mb-5 mt-5">
+        <div class="row">
+        <div class="col-md-5">
+            <div class="project-info-box mt-0 text-white">
+                <h5>{{ movie.name }}</h5>
+                <p class="mb-0">{{ movie.description }}</p>
+            </div><!-- / project-info-box -->
+
+            <div class="project-info-box text-white">
+                <p><b>Length:</b> {{movie.length_min}} min</p>
+                <p><b>IMDB:</b> <a style="color:white" href="{{movie.get_imdb_url}}"><i class="fa-brands fa-imdb"></i></a></p>
+                <iframe width="400" height="315" src="{{movie.trailer_url}}"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+
+                </iframe>
+            </div><!-- / project-info-box -->
+        </div>
+
+        <div class="col-md-7">
+            <div class="card" style="width:300px; height400px;" >
+            <img src="{{movie.poster.url}}" alt="project-image" class="rounded">
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}
