@@ -23,6 +23,8 @@ urlpatterns = [
     re_path('home/', include('ui.urls')),
     path('auth/', include('users.urls')),
     path('reservations/', include('reservation.urls')),
+    path('movies/', include('movies.urls')),
+
 ]
 urlpatterns += static(settings.MEDIA_URL,
                       document_root=settings.MEDIA_ROOT)
