@@ -24,14 +24,3 @@ class Movie(models.Model):
     @cached_property
     def get_imdb_url(self):
         return f'{settings.IMDB_URL}{self.imdb_id}'
-
-
-class Csv(models.Model):
-    csv = models.FileField(upload_to='csv')
-    uploaded = models.DateTimeField(auto_now_add=True)
-    is_used = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f'ID: {self.pk}'
-
-

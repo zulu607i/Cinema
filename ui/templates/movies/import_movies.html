@@ -1,13 +1,10 @@
-{% extends 'base.html' %}
+{% extends "admin/base.html" %}
 
 {% block content %}
-<div class="container mb-5 mt-5 justify-content-center">
-    <div class="row mb-5" style="color: white;">
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="primary">Import</button>
-        </form>
-    </div>
-</div>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="primary">Import</button>
+</form>
 {% endblock %}
