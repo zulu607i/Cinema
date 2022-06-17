@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'contact',
     'nested_inline',
     'django_filters',
+    'django_q',
 
 ]
 
@@ -128,7 +129,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Bucharest'
 
 USE_I18N = True
 
@@ -161,3 +162,10 @@ MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'images/')
 
 LOGIN_URL = 'login'
+
+Q_CLUSTER = {
+    "name": "reservations",
+    "retry": 10,
+    "timeout": 5,
+    "orm": "default",
+}

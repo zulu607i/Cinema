@@ -55,6 +55,7 @@ class Reservation(models.Model):
     seat = models.ForeignKey(Seat, null=True, on_delete=models.CASCADE)
     playing_time = models.ForeignKey(PlayingTime, null=True, on_delete=models.CASCADE, verbose_name='Cinema/Hall/Date')
     is_confirmed = models.BooleanField(default=False)
+    expired = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ['playing_time', 'seat']
