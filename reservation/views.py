@@ -56,7 +56,9 @@ def get_csv_file(request):
                              r.playing_time.assigned_hall,
                              r.playing_time.assigned_movie,
                              r.seat,
-                             r.playing_time.start_time])
+                             r.playing_time.start_time,
+                             r.is_confirmed,
+                             ])
 
         return response
 
