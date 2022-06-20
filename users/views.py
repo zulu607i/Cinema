@@ -1,6 +1,11 @@
+from base64 import urlsafe_b64decode
+
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
+from django.core.validators import validate_email
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
@@ -38,7 +43,9 @@ def activate_user_profile(request, uidb64, token):
 
 
 @ratelimit(key="ip", rate="30/m", block=True)
-def register_view(request):
+def register_view(request,  uidb64):
+    uidb64_padded = uidb64 + "=" * (-len(uidb64) % 4)
+    to_email = force_str(urlsafe_b64decode(uidb64_padded))
     form = SignUpForm(request.POST)
     if form.is_valid():
         user = form.save()
@@ -49,7 +56,7 @@ def register_view(request):
         user.save()
         current_domain = get_current_site(request)
 
-        message = render_to_string('users/partials/request_activation.html', {
+        message = render_to_string('users/partials/activate.html', {
             'user': user,
             'domain': current_domain.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -61,14 +68,16 @@ def register_view(request):
         send_mail('Please Activate Your Account',
                   message,
                   EMAIL_HOST_USER,
-                  [f'{user.email}']
+                  [to_email]
                   )
 
         return redirect('home')
     else:
         form = SignUpForm()
 
-    return render(request, 'users/sign_up.html', {'form': form})
+    return render(request, 'users/sign_up.html', {'form': form,
+                                                  'email': to_email})
+
 
 @ratelimit(key="ip", rate="30/m", block=True)
 def loginPage(request):
@@ -93,3 +102,31 @@ def loginPage(request):
 def logoutPage(request):
     logout(request)
     return redirect('home')
+
+def pre_register(request):
+    if request.method == "POST":
+        try:
+            validate_email(request.POST["email"])
+        except ValidationError:
+            messages.error(request, ("Email address is incorrect"))
+            return redirect("pre_register")
+        else:
+            email = request.POST['email']
+            encoded_email = urlsafe_base64_encode(force_bytes(email))
+            current_domain = get_current_site(request)
+            message = render_to_string('users/partials/email_verification.html', {
+                'user': email,
+                'domain': current_domain.domain,
+                'uid': encoded_email,
+
+            })
+            print(message)
+            send_mail('Please Activate Your Account',
+                      message,
+                      EMAIL_HOST_USER,
+                      [email]
+                      )
+            messages.success(request, 'Please check your email to continue the registration')
+            return redirect('home')
+
+    return render(request, 'users/partials/pre_register.html')

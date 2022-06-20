@@ -24,10 +24,3 @@ class Movie(models.Model):
     @cached_property
     def get_imdb_url(self):
         return f'{settings.IMDB_URL}{self.imdb_id}'
-
-
-
-
-
-
-

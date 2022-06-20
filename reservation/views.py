@@ -1,7 +1,12 @@
+from datetime import timedelta
+
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.db.models import F
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils import timezone
+
 from reservation.models import Reservation
 from .forms import ReservationForm
 from movies.models import Movie
@@ -63,4 +68,3 @@ def get_csv_file(request):
         return response
 
     return render(request, 'reservation/user_reservation.html', {'reservations': reservations})
-
