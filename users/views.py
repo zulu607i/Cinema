@@ -52,20 +52,16 @@ def register_view(request,  uidb64):
         user.refresh_from_db()
         user.userprofile.first_name = form.cleaned_data.get('first_name')
         user.userprofile.last_name = form.cleaned_data.get('last_name')
-        user.is_active = False
+        user.is_active = True
+        # set signup_confirmation true
         user.save()
-        current_domain = get_current_site(request)
+        login(request, user)
 
-        message = render_to_string('users/partials/activate.html', {
-            'user': user,
-            'domain': current_domain.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': generate_token.make_token(user),
 
-        })
+        message = f"Hello {user.email}, your account has been created."
         # send email
         print(message)
-        send_mail('Please Activate Your Account',
+        send_mail(f'Welcome, {user.username}',
                   message,
                   EMAIL_HOST_USER,
                   [to_email]
