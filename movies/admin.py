@@ -32,20 +32,33 @@ class MovieAdmin(admin.ModelAdmin):
         form = CsvForm(request.POST, request.FILES)
         if form.is_valid():
             csv_file = TextIOWrapper(request.FILES['csv_file'], encoding=request.encoding)
-            movies = csv.reader(csv_file)
+            movies = csv.DictReader(csv_file)
+            movies_list = []
             for movie in movies:
                 try:
-                    Movie.objects.create(name=movie[0],
-                                         poster=movie[1],
-                                         description=movie[2],
-                                         imdb_id=movie[3],
-                                         length_min=int(movie[4]),
-                                         trailer_url=movie[5])
+                    created_movie = Movie(**movie)
+                    name = movie["poster"].split("/")[-1]
+                    response = requests.get(created_movie.poster)
+                    if response.status_code == 200:
+                        created_movie.poster.save(
+                            name, ContentFile(response.content), save=False
+                        )
 
                 except (requests.exceptions.MissingSchema, IntegrityError) as e:
                     messages.error(
                         request=request,
-                        message=f"\nFailed to add movie: {movie[0]} to the DB due to following error: {e}",
+                        message=f"\nFailed to add movie: {movie} to the DB due to following error: {e}",
                     )
+                else:
+                    movies_all = Movie.objects.all()
+                    for m in movies_all:
+                        if not m.pk:
+                            movies_list.append(created_movie)
+                            Movie.objects.bulk_create(movies_list)
+                        else:
+                            movies_list.append(created_movie)
+                            Movie.objects.bulk_update(movies_list, fields=['name', 'poster', 'description', 'imdb_id', 'length_min', 'trailer_url'])
+
+                    return redirect("..")
 
         return render(request, 'movies/import_movies.html', {'form': form})
