@@ -1,3 +1,5 @@
+from itertools import chain
+
 import requests
 from django.contrib import admin
 from django.core.files.base import ContentFile
@@ -34,9 +36,13 @@ class MovieAdmin(admin.ModelAdmin):
             csv_file = TextIOWrapper(request.FILES['csv_file'], encoding=request.encoding)
             movies = csv.DictReader(csv_file)
             movies_list = []
+            existing_movies = []
+
             for movie in movies:
+                created_movie = Movie(**movie)
                 try:
-                    created_movie = Movie(**movie)
+                    movies_list.append(created_movie)
+                    existing_movies.append(created_movie)
                     name = movie["poster"].split("/")[-1]
                     response = requests.get(created_movie.poster)
                     if response.status_code == 200:
@@ -49,16 +55,13 @@ class MovieAdmin(admin.ModelAdmin):
                         request=request,
                         message=f"\nFailed to add movie: {movie} to the DB due to following error: {e}",
                     )
-                else:
-                    movies_all = Movie.objects.all()
-                    for m in movies_all:
-                        if not m.pk:
-                            movies_list.append(created_movie)
-                            Movie.objects.bulk_create(movies_list)
-                        else:
-                            movies_list.append(created_movie)
-                            Movie.objects.bulk_update(movies_list, fields=['name', 'poster', 'description', 'imdb_id', 'length_min', 'trailer_url'])
 
-                    return redirect("..")
+            if not Movie.objects.all():
+                Movie.objects.bulk_create(movies_list)
+
+            elif len(existing_movies) == len(Movie.objects.all()):
+                Movie.objects.bulk_update(existing_movies, fields=['name', 'poster', 'description', 'imdb_id', 'length_min', 'trailer_url'])
+
+            return redirect("..")
 
         return render(request, 'movies/import_movies.html', {'form': form})
