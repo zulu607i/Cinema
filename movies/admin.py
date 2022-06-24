@@ -35,14 +35,11 @@ class MovieAdmin(admin.ModelAdmin):
         if form.is_valid():
             csv_file = TextIOWrapper(request.FILES['csv_file'], encoding=request.encoding)
             movies = csv.DictReader(csv_file)
-            new_movies = []
-            new_movies_pk = []
             added_movies = []
+            system_list = Movie.objects.values_list('pk', flat=True)
             for movie in movies:
                 created_movie = Movie(**movie)
                 try:
-                    new_movies_pk.append(int(created_movie.pk))
-                    new_movies.append(created_movie)
                     name = movie["poster"].split("/")[-1]
                     response = requests.get(created_movie.poster)
 
@@ -50,6 +47,12 @@ class MovieAdmin(admin.ModelAdmin):
                         created_movie.poster.save(
                             name, ContentFile(response.content), save=False
                         )
+                    if int(movie['pk']) not in system_list:
+                        added_movies.append(Movie(**movie))
+                    elif int(movie['pk']) in system_list:
+                        Movie.objects.bulk_update([Movie(**movie)],
+                                                  fields=['name', 'poster', 'description', 'imdb_id', 'length_min',
+                                                          'trailer_url'])
 
                 except (requests.exceptions.MissingSchema, IntegrityError) as e:
                     messages.error(
@@ -57,16 +60,7 @@ class MovieAdmin(admin.ModelAdmin):
                         message=f"\nFailed to add movie: {movie} to the DB due to following error: {e}",
                     )
 
-            system_list = Movie.objects.values_list('pk', flat=True)
-            for item in new_movies:
-                if int(item.pk) not in system_list:
-                    added_movies.append(item)
             Movie.objects.bulk_create(added_movies)
-
-            if not Movie.objects.all():
-                Movie.objects.bulk_create(new_movies)
-            else:
-                Movie.objects.bulk_update(new_movies, fields=['name', 'poster', 'description', 'imdb_id', 'length_min', 'trailer_url'])
 
             return redirect("..")
 
