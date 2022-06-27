@@ -36,6 +36,7 @@ class MovieAdmin(admin.ModelAdmin):
             csv_file = TextIOWrapper(request.FILES['csv_file'], encoding=request.encoding)
             movies = csv.DictReader(csv_file)
             added_movies = []
+            updated_movies = []
             system_list = Movie.objects.values_list('pk', flat=True)
             for movie in movies:
                 created_movie = Movie(**movie)
@@ -50,10 +51,7 @@ class MovieAdmin(admin.ModelAdmin):
                     if int(movie['pk']) not in system_list:
                         added_movies.append(Movie(**movie))
                     elif int(movie['pk']) in system_list:
-                        Movie.objects.bulk_update([Movie(**movie)],
-                                                  fields=['name', 'poster', 'description', 'imdb_id', 'length_min',
-                                                          'trailer_url'])
-
+                        updated_movies.append(Movie(**movie))
                 except (requests.exceptions.MissingSchema, IntegrityError) as e:
                     messages.error(
                         request=request,
@@ -61,7 +59,10 @@ class MovieAdmin(admin.ModelAdmin):
                     )
 
             Movie.objects.bulk_create(added_movies)
+            Movie.objects.bulk_update(updated_movies,
+                                      fields=['name', 'poster', 'description', 'imdb_id', 'length_min',
+                                              'trailer_url'])
 
-            return redirect("..")
+            return redirect("admin:movies_movie_changelist")
 
         return render(request, 'movies/import_movies.html', {'form': form})
