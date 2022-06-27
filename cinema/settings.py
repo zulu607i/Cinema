@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'nested_inline',
     'django_filters',
     'django_q',
-
 ]
 
 MIDDLEWARE = [
@@ -158,8 +157,8 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 
 IMDB_URL = 'https://www.imdb.com/title/'
 
-MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'images/')
+MEDIA_URL = '/media/images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LOGIN_URL = 'login'
 
