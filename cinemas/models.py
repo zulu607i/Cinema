@@ -26,6 +26,7 @@ class Hall(models.Model):
 class Seat(models.Model):
     seat_name = models.CharField(default='A1', max_length=4)
     halls = models.ForeignKey(Hall, null=True, on_delete=models.SET_NULL)
+    is_occupied = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.seat_name} {self.halls.name}'
