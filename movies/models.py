@@ -13,7 +13,7 @@ class Movie(models.Model):
     name = models.CharField(max_length=100, null=True, verbose_name='Title')
     poster = models.ImageField(verbose_name='Poster')
     description = models.TextField(max_length=200, null=True, verbose_name='Description')
-    imdb_id = models.CharField(max_length=30, null=True, unique=True, verbose_name='IMDB_id')
+    imdb_id = models.CharField(max_length=30, null=True, verbose_name='IMDB_id')
     length_min = models.IntegerField(verbose_name='Length')
     trailer_url = models.URLField(max_length=200, null=True, blank=True)
     is_scheduled = models.BooleanField(default=False)
