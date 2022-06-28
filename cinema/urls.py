@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from cinema import settings
+from api.urls import router
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +26,7 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('reservations/', include('reservation.urls')),
     path('movies/', include('movies.urls')),
+    path('api/', include(router.urls)),
 
 ]
 urlpatterns += static(settings.MEDIA_URL,
