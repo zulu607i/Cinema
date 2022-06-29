@@ -1,11 +1,8 @@
 import base64
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-from api.authentication import BearerAuthentication
 from movies.models import Movie
 from reservation.models import PlayingTime
 from api.utils import get_current_week
@@ -29,8 +26,8 @@ class ObtainAuthTokenBase64(ObtainAuthToken):
 
 get_token_base64 = ObtainAuthTokenBase64.as_view()
 
-class MoviesPlayingThisWeekViewSet(viewsets.ModelViewSet):
 
+class MoviesPlayingThisWeekViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.filter(
         pk__in=PlayingTime.objects.filter(
             start_time__range=get_current_week()
@@ -39,10 +36,6 @@ class MoviesPlayingThisWeekViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
 
 
-
-
 class MoviesPlayingThisWeekDetailsViewSet(viewsets.ModelViewSet):
-    authentication_classes = [BearerAuthentication]
-
     queryset = PlayingTime.objects.filter(start_time__range=get_current_week())
     serializer_class = PlayingTimeSerializer
