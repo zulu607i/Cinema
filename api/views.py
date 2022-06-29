@@ -24,3 +24,5 @@ class MoviesPlayingThisWeekDetailsViewSet(viewsets.ReadOnlyModelViewSet):
 class MoviesAPIView(viewsets.ModelViewSet):
     queryset = Movie.objects.order_by('id')
     serializer_class = MovieSerializer
+
+
