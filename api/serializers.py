@@ -59,10 +59,17 @@ class MovieSerializer(serializers.ModelSerializer):
         exclude = ['user', 'is_scheduled']
 
 
-class PlayingTimeSerializer(serializers.ModelSerializer):
+class PlayingTimeWithDetailsSerializer(serializers.ModelSerializer):
     hall = HallSerializer(source='assigned_hall')
     movie = MovieSerializer(source="assigned_movie")
 
     class Meta:
         model = PlayingTime
         fields = ['movie', 'hall', 'get_date', 'get_time']
+
+
+class PlayingTimeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PlayingTime
+        fields = '__all__'
