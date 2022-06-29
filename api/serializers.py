@@ -43,7 +43,7 @@ class HallSerializer(serializers.ModelSerializer):
     cinema = MovieTheaterSerializer(source='movie_theater')
     class Meta:
         model = Hall
-        fields = ['name', 'cinema',]
+        fields = ['id','name', 'cinema',]
 
 
 class SeatSerializer(serializers.ModelSerializer):

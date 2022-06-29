@@ -1,8 +1,10 @@
 from django.shortcuts import render
+
+from cinemas.models import Hall
 from movies.models import Movie
 from reservation.models import PlayingTime
 from api.utils import get_current_week
-from .serializers import MovieSerializer, PlayingTimeSerializer
+from .serializers import MovieSerializer, PlayingTimeSerializer, HallSerializer
 from rest_framework import viewsets
 # Create your views here.
 
@@ -19,3 +21,7 @@ class MoviesPlayingThisWeekViewSet(viewsets.ModelViewSet):
 class MoviesPlayingThisWeekDetailsViewSet(viewsets.ModelViewSet):
     queryset = PlayingTime.objects.filter(start_time__range=get_current_week())
     serializer_class = PlayingTimeSerializer
+
+class HallViewSet(viewsets.ModelViewSet):
+    queryset = Hall.objects.order_by('id')
+    serializer_class = HallSerializer
