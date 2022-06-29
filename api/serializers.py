@@ -1,5 +1,5 @@
 from cinemas.models import MovieTheater, Hall, Seat
-from reservation.models import PlayingTime
+from reservation.models import PlayingTime, Reservation
 from locations.models import *
 from movies.models import Movie
 from rest_framework import serializers
@@ -66,3 +66,8 @@ class PlayingTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlayingTime
         fields = ['movie', 'hall', 'get_date', 'get_time']
+
+class ReservationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = '__all__'
