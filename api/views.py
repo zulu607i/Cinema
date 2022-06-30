@@ -2,11 +2,12 @@ import base64
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
-
+from cinemas.models import Hall
 from movies.models import Movie
 from reservation.models import PlayingTime, Reservation
 from api.utils import get_current_week
-from .serializers import MovieSerializer, PlayingTimeSerializer, PlayingTimeWithDetailsSerializer, ReservationSerializer
+from .serializers import MovieSerializer, PlayingTimeSerializer, \
+    PlayingTimeWithDetailsSerializer, ReservationSerializer, HallSerializer
 from rest_framework import viewsets
 # Create your views here.
 
@@ -50,3 +51,8 @@ class MoviesAPIView(viewsets.ModelViewSet):
 class ReservationsViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+
+
+class HallViewSet(viewsets.ModelViewSet):
+    queryset = Hall.objects.order_by('id')
+    serializer_class = HallSerializer

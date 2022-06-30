@@ -1,7 +1,6 @@
 from rest_framework import routers
 from api.views import MoviesPlayingThisWeekViewSet, MoviesPlayingThisWeekDetailsViewSet,\
-    MoviesAPIView, PlayingTimeViewSet, ReservationsViewSet
-
+    MoviesAPIView, PlayingTimeViewSet, ReservationsViewSet, HallViewSet
 
 router = routers.DefaultRouter()
 
@@ -24,4 +23,7 @@ router.register(
 
 router.register(
     "reservations", ReservationsViewSet, 'reservations'
+)
+router.register(
+    "halls", HallViewSet, 'halls'
 )
