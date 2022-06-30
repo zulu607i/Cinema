@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from movies.models import Movie
 from reservation.models import PlayingTime
 from api.utils import get_current_week
-from .serializers import MovieSerializer, PlayingTimeSerializer
-from rest_framework import viewsets, generics
+from .serializers import MovieSerializer, PlayingTimeSerializer, PlayingTimeWithDetailsSerializer
+from rest_framework import viewsets
 # Create your views here.
 
 
@@ -34,11 +34,17 @@ class MoviesPlayingThisWeekViewSet(viewsets.ReadOnlyModelViewSet):
 
 class MoviesPlayingThisWeekDetailsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = PlayingTime.objects.filter(start_time__range=get_current_week())
+    serializer_class = PlayingTimeWithDetailsSerializer
+
+
+class PlayingTimeViewSet(viewsets.ModelViewSet):
+    queryset = PlayingTime.objects.order_by('start_time')
     serializer_class = PlayingTimeSerializer
 
 
 class MoviesAPIView(viewsets.ModelViewSet):
     queryset = Movie.objects.order_by('id')
     serializer_class = MovieSerializer
+
 
 
