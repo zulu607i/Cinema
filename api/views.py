@@ -4,9 +4,9 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 
 from movies.models import Movie
-from reservation.models import PlayingTime
+from reservation.models import PlayingTime, Reservation
 from api.utils import get_current_week
-from .serializers import MovieSerializer, PlayingTimeSerializer, PlayingTimeWithDetailsSerializer
+from .serializers import MovieSerializer, PlayingTimeSerializer, PlayingTimeWithDetailsSerializer, ReservationSerializer
 from rest_framework import viewsets
 # Create your views here.
 
@@ -47,4 +47,6 @@ class MoviesAPIView(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
 
 
-
+class ReservationsViewSet(viewsets.ModelViewSet):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
