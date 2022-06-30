@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf.urls.static import static
+
+from api.views import get_token_base64
 from cinema import settings
 from api.urls import router
 
@@ -27,6 +29,7 @@ urlpatterns = [
     path('reservations/', include('reservation.urls')),
     path('movies/', include('movies.urls')),
     path('api/', include(router.urls)),
+    path('get-token/', get_token_base64)
 
 ]
 urlpatterns += static(settings.MEDIA_URL,
