@@ -1,13 +1,29 @@
-from django.shortcuts import render
+import base64
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.response import Response
+
 from movies.models import Movie
 from reservation.models import PlayingTime
 from api.utils import get_current_week
-from .serializers import MovieSerializer, PlayingTimeWithDetailsSerializer, PlayingTimeSerializer
+from .serializers import MovieSerializer, PlayingTimeSerializer, PlayingTimeWithDetailsSerializer
 from rest_framework import viewsets
 # Create your views here.
 
 
-class MoviesPlayingThisWeekViewSet(viewsets.ModelViewSet):
+class ObtainAuthTokenBase64(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({"token": base64.b64encode(token.key.encode("ascii"))})
+
+
+get_token_base64 = ObtainAuthTokenBase64.as_view()
+
+class MoviesPlayingThisWeekViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Movie.objects.filter(
         pk__in=PlayingTime.objects.filter(
             start_time__range=get_current_week()
@@ -16,7 +32,7 @@ class MoviesPlayingThisWeekViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
 
 
-class MoviesPlayingThisWeekDetailsViewSet(viewsets.ModelViewSet):
+class MoviesPlayingThisWeekDetailsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = PlayingTime.objects.filter(start_time__range=get_current_week())
     serializer_class = PlayingTimeWithDetailsSerializer
 
@@ -24,3 +40,11 @@ class MoviesPlayingThisWeekDetailsViewSet(viewsets.ModelViewSet):
 class PlayingTimeViewSet(viewsets.ModelViewSet):
     queryset = PlayingTime.objects.order_by('start_time')
     serializer_class = PlayingTimeSerializer
+
+
+class MoviesAPIView(viewsets.ModelViewSet):
+    queryset = Movie.objects.order_by('id')
+    serializer_class = MovieSerializer
+
+
+
