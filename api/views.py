@@ -9,6 +9,8 @@ from api.utils import get_current_week
 from .serializers import MovieSerializer, PlayingTimeSerializer, \
     PlayingTimeWithDetailsSerializer, ReservationSerializer, HallSerializer
 from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import PlayingTimeFilter
 # Create your views here.
 
 
@@ -24,6 +26,7 @@ class ObtainAuthTokenBase64(ObtainAuthToken):
 
 get_token_base64 = ObtainAuthTokenBase64.as_view()
 
+
 class MoviesPlayingThisWeekViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Movie.objects.filter(
         pk__in=PlayingTime.objects.filter(
@@ -38,9 +41,12 @@ class MoviesPlayingThisWeekDetailsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PlayingTimeWithDetailsSerializer
 
 
+
 class PlayingTimeViewSet(viewsets.ModelViewSet):
     queryset = PlayingTime.objects.order_by('start_time')
     serializer_class = PlayingTimeSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = PlayingTimeFilter
 
 
 class MoviesAPIView(viewsets.ModelViewSet):
