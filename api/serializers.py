@@ -3,7 +3,13 @@ from reservation.models import PlayingTime, Reservation
 from locations.models import *
 from movies.models import Movie
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['username']
 
 class CountySerializer(serializers.ModelSerializer):
 
@@ -50,7 +56,7 @@ class SeatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Seat
-        fields = ['__all__']
+        fields = '__all__'
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -67,15 +73,33 @@ class PlayingTimeWithDetailsSerializer(serializers.ModelSerializer):
         model = PlayingTime
         fields = ['movie', 'hall', 'get_date', 'get_time']
 
-class ReservationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Reservation
-        fields = '__all__'
-
-
 
 class PlayingTimeSerializer(serializers.ModelSerializer):
     movie = MovieSerializer(source="assigned_movie")
     class Meta:
         model = PlayingTime
         fields = ['id', 'movie', 'start_time', 'end_time']
+
+
+class ReservationSerializer(serializers.ModelSerializer):
+    playing_time_name = serializers.CharField(source='playing_time', read_only=True)
+    movie = MovieSerializer(read_only=True)
+
+    class Meta:
+        model = Reservation
+        fields = ['id', 'user',  'playing_time', 'playing_time_name', 'seat', 'is_confirmed', 'movie']
+
+
+class UserReservationSerializer(serializers.ModelSerializer):
+    movie = serializers.CharField(source='playing_time.assigned_movie.name', read_only=True)
+    playing_time_name = serializers.CharField(source='playing_time', read_only=True)
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Reservation
+        fields = ['id', 'user', 'playing_time', 'playing_time_name', 'seat', 'is_confirmed', 'movie']
+
+
+
+
+

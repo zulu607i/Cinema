@@ -17,10 +17,10 @@ class PlayingTime(models.Model):
         unique_together = ['assigned_hall', 'start_time']
 
     def __str__(self):
-        return f'Cinema: {self.assigned_hall.movie_theater} ' \
-               f'Hall: {self.assigned_hall} ' \
-               f'Date: {self.get_date()} ' \
-               f'Time:{self.get_time()} '
+        return f'{self.assigned_movie.name} in ' \
+               f'{self.assigned_hall} on ' \
+               f'{self.get_date()} ' \
+               f'{self.get_time()} '
 
     def get_date(self):
         return self.start_time.strftime('%d %B %Y')
