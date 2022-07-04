@@ -1,8 +1,10 @@
+from rest_framework.exceptions import ValidationError
+
 from cinemas.models import MovieTheater, Hall, Seat
 from reservation.models import PlayingTime, Reservation
 from locations.models import *
 from movies.models import Movie
-from rest_framework import serializers
+from rest_framework import serializers, status
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -53,10 +55,9 @@ class HallSerializer(serializers.ModelSerializer):
 
 
 class SeatSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Seat
-        fields = '__all__'
+        fields = ['is_occupied', 'seat_name']
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -98,6 +99,15 @@ class UserReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = ['id', 'user', 'playing_time', 'playing_time_name', 'seat', 'is_confirmed', 'movie']
+
+
+class ChangeReservationSeatStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seat
+        fields = ['id', 'seat_name', 'is_occupied', 'halls']
+
+
+
 
 
 

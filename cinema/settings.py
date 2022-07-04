@@ -181,8 +181,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.BasePermission',
-        'rest_framework.permissions.IsAuthenticated', )
+        'rest_framework.permissions.BasePermission', )
 
 
 }
+
+API_SECRET_KEY = env('API_KEY')

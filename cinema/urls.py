@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf.urls.static import static
 
-from api.views import get_token_base64
+from api.views import get_token_base64, change_seat_status
 from cinema import settings
 from api.urls import router
 
@@ -29,7 +29,8 @@ urlpatterns = [
     path('reservations/', include('reservation.urls')),
     path('movies/', include('movies.urls')),
     path('api/', include(router.urls)),
-    path('get-token/', get_token_base64)
+    path('get-token/', get_token_base64),
+    path('api/change-seats/<str:pk>', change_seat_status)
 
 ]
 urlpatterns += static(settings.MEDIA_URL,
