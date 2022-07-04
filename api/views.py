@@ -7,10 +7,11 @@ from movies.models import Movie
 from reservation.models import PlayingTime, Reservation
 from api.utils import get_current_week
 from .serializers import MovieSerializer, PlayingTimeSerializer, \
-    PlayingTimeWithDetailsSerializer, ReservationSerializer, HallSerializer
-from rest_framework import viewsets
+    PlayingTimeWithDetailsSerializer, ReservationSerializer, HallSerializer, UserReservationSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import PlayingTimeFilter
+from rest_framework import viewsets, response, status
+from rest_framework.permissions import IsAdminUser
 # Create your views here.
 
 
@@ -57,8 +58,22 @@ class MoviesAPIView(viewsets.ModelViewSet):
 class ReservationsViewSet(viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+    permission_classes = [IsAdminUser]
 
 
 class HallViewSet(viewsets.ModelViewSet):
     queryset = Hall.objects.order_by('id')
     serializer_class = HallSerializer
+
+
+class UserReservationViewSet(viewsets.ModelViewSet):
+    serializer_class = UserReservationSerializer
+
+    def get_queryset(self):
+        return Reservation.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user)
+
+
+
