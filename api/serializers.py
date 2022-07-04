@@ -93,11 +93,12 @@ class ReservationSerializer(serializers.ModelSerializer):
 class UserReservationSerializer(serializers.ModelSerializer):
     movie = serializers.CharField(source='playing_time.assigned_movie.name', read_only=True)
     playing_time_name = serializers.CharField(source='playing_time', read_only=True)
+    reservation_is_confirmed = serializers.BooleanField(source='is_confirmed', read_only=True)
     user = UserSerializer(read_only=True)
 
     class Meta:
         model = Reservation
-        fields = ['id', 'user', 'playing_time', 'playing_time_name', 'seat', 'is_confirmed', 'movie']
+        fields = ['id', 'user', 'playing_time', 'playing_time_name', 'seat', 'reservation_is_confirmed', 'movie']
 
 
 
