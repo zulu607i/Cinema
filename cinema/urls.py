@@ -20,6 +20,8 @@ from django.conf.urls.static import static
 from api.views import get_token_base64
 from cinema import settings
 from api.urls import router
+from rest_framework.schemas import get_schema_view
+from django.views.generic import TemplateView
 
 
 urlpatterns = [
@@ -29,7 +31,12 @@ urlpatterns = [
     path('reservations/', include('reservation.urls')),
     path('movies/', include('movies.urls')),
     path('api/', include(router.urls)),
-    path('get-token/', get_token_base64)
+    path('get-token/', get_token_base64),
+    path('schema/', get_schema_view(title='Cinema API', description='An api for a cinema'), name='cinema_api'),
+    path('docs/', TemplateView.as_view(
+        template_name='swagger.html',
+        extra_context={'schema_url': 'cinema_api'}
+        ), name='swagger-ui'),
 
 ]
 urlpatterns += static(settings.MEDIA_URL,
