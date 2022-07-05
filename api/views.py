@@ -87,12 +87,6 @@ class UserReservationViewSet(viewsets.ModelViewSet):
         return serializer.save(user=self.request.user)
 
 
-class ChangeSeatStatusViewSet(viewsets.ModelViewSet):
-    serializer_class = ChangeReservationSeatStatusSerializer
-    queryset = Seat.objects.filter(is_occupied=False)
-    Seat.objects.update(is_occupied=False)
-
-
 @permission_classes([Check_API_KEY_Auth])
 @api_view(['GET'])
 def change_seat_status(request, pk):
