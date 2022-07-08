@@ -17,12 +17,27 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf.urls.static import static
 
+from api.authentication import BearerAuthentication
 from api.views import get_token_base64, change_seat_status
 from cinema import settings
 from api.urls import router
-from rest_framework.schemas import get_schema_view
-from django.views.generic import TemplateView
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
+schema_view = get_schema_view(
+    openapi.Info(
+      title="Snippets API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+    authentication_classes=(BearerAuthentication,)
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,13 +47,10 @@ urlpatterns = [
     path('movies/', include('movies.urls')),
     path('api/', include(router.urls)),
     path('get-token/', get_token_base64),
-    path('schema/', get_schema_view(title='Cinema API', description='An api for a cinema'), name='cinema_api'),
-    path('docs/', TemplateView.as_view(
-        template_name='swagger.html',
-        extra_context={'schema_url': 'cinema_api'}
-        ), name='swagger-ui'),
-    path('api/change-seats/<str:pk>', change_seat_status)
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 
+    path('api/change-seats/<str:pk>', change_seat_status)
 ]
+
 urlpatterns += static(settings.MEDIA_URL,
                       document_root=settings.MEDIA_ROOT)
