@@ -62,9 +62,11 @@ class SeatSerializer(serializers.ModelSerializer):
 
 
 class MovieSerializer(serializers.ModelSerializer):
+    poster_path = serializers.CharField(source='poster')
+
     class Meta:
         model = Movie
-        exclude = ['user', 'is_scheduled']
+        exclude = ['user', 'is_scheduled', 'poster']
 
 
 class PlayingTimeWithDetailsSerializer(serializers.ModelSerializer):
@@ -77,11 +79,9 @@ class PlayingTimeWithDetailsSerializer(serializers.ModelSerializer):
 
 
 class PlayingTimeSerializer(serializers.ModelSerializer):
-    movie = MovieSerializer(source="assigned_movie")
-
     class Meta:
         model = PlayingTime
-        fields = ['id', 'movie', 'start_time', 'end_time']
+        fields = ['id', 'start_time', 'end_time', 'assigned_movie', 'assigned_hall']
 
 
 class ReservationSerializer(serializers.ModelSerializer):
