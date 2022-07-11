@@ -61,9 +61,11 @@ class SeatSerializer(serializers.ModelSerializer):
 
 
 class MovieSerializer(serializers.ModelSerializer):
+    poster_path = serializers.CharField(source='poster')
+
     class Meta:
         model = Movie
-        exclude = ['user', 'is_scheduled']
+        exclude = ['user', 'is_scheduled', 'poster']
 
 
 class PlayingTimeWithDetailsSerializer(serializers.ModelSerializer):
