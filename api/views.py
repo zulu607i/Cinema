@@ -16,7 +16,6 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .permissions import Check_API_KEY_Auth
 from rest_framework.decorators import api_view, permission_classes
 
-
 # Create your views here.
 
 

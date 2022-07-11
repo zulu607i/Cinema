@@ -1,6 +1,4 @@
 import base64
-
-from django.contrib.auth import login
 from rest_framework import authentication, exceptions
 
 

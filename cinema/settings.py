@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_q',
     'rest_framework',
-    'rest_framework_swagger',
+    'drf_yasg',
     'api',
     "rest_framework.authtoken",
 ]
@@ -182,9 +182,19 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.BasePermission', )
+        'rest_framework.permissions.IsAuthenticated', )
 
 
+}
+
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+      'Bearer': {
+          "type": "apiKey",
+          "name": "Authorization",
+          "in": "header",
+}
+   }
 }
 
 API_SECRET_KEY = env('API_KEY')
