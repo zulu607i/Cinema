@@ -78,10 +78,9 @@ class PlayingTimeWithDetailsSerializer(serializers.ModelSerializer):
 
 
 class PlayingTimeSerializer(serializers.ModelSerializer):
-    movie = MovieSerializer(source="assigned_movie")
     class Meta:
         model = PlayingTime
-        fields = ['id', 'movie', 'start_time', 'end_time']
+        fields = ['id', 'start_time', 'end_time', 'assigned_movie', 'assigned_hall']
 
 
 class ReservationSerializer(serializers.ModelSerializer):
