@@ -4,7 +4,7 @@ from cinemas.models import MovieTheater, Hall, Seat
 from reservation.models import PlayingTime, Reservation
 from locations.models import *
 from movies.models import Movie
-from rest_framework import serializers, status
+from rest_framework import serializers
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -38,9 +38,9 @@ class StreetSerializer(serializers.ModelSerializer):
 
 
 class MovieTheaterSerializer(serializers.ModelSerializer):
-    county = CountySerializer()
-    city = CitySerializer()
-    street = StreetSerializer()
+    county = CountySerializer(read_only=True)
+    city = CitySerializer(read_only=True)
+    street = StreetSerializer(read_only=True)
 
     class Meta:
         model = MovieTheater
@@ -48,10 +48,11 @@ class MovieTheaterSerializer(serializers.ModelSerializer):
 
 
 class HallSerializer(serializers.ModelSerializer):
-    cinema = MovieTheaterSerializer(source='movie_theater')
+    cinema = MovieTheaterSerializer(source='movie_theater', read_only=True)
+
     class Meta:
         model = Hall
-        fields = ['id','name', 'cinema',]
+        fields = ['id', 'name', 'movie_theater', 'cinema']
 
 
 class SeatSerializer(serializers.ModelSerializer):
