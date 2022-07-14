@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+    django:
+        build: .
+        container_name: cinema_app
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+          - .:/usr/src/app
+        ports:
+          - "8000:8000"
+        depends_on:
+          - db
+    db:
+        image: postgres
+        environment:
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=mmuntean1!
+        ports:
+          - "5432:5432"
