@@ -95,13 +95,13 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'cinema_app_2',
+        'NAME': 'postgres',
 
         'USER': 'postgres',
 
         'PASSWORD': 'mmuntean1!',
 
-        'HOST': 'localhost',
+        'HOST': 'db',
 
         'PORT': '5432',
     }
