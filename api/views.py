@@ -8,7 +8,7 @@ from reservation.models import PlayingTime, Reservation
 from api.utils import get_current_week
 from .serializers import MovieSerializer, PlayingTimeSerializer, \
     PlayingTimeWithDetailsSerializer, ReservationSerializer, HallSerializer, UserReservationSerializer, \
-    ChangeReservationSeatStatusSerializer
+    ChangeReservationSeatStatusSerializer, SeatSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import PlayingTimeFilter
 from rest_framework import viewsets, response, status
@@ -94,3 +94,8 @@ def change_seat_status(request, pk):
     if not seats.is_occupied:
         seats.is_occupied = True
     return Response(serialseats.data)
+
+class SeatsViewSet(viewsets.ModelViewSet):
+    serializer_class = SeatSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Seat.objects.order_by('id')
