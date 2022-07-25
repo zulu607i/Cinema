@@ -30,3 +30,6 @@ router.register(
 router.register(
     "user-reservations", UserReservationViewSet, 'user_reservations'
 )
+router.register(
+    "possible-frauds", UserReservationViewSet, 'user_reservations'
+)

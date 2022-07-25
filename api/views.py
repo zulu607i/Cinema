@@ -48,7 +48,6 @@ class MoviesPlayingThisWeekDetailsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PlayingTimeWithDetailsSerializer
 
 
-
 class PlayingTimeViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = PlayingTime.objects.order_by('start_time')
@@ -94,3 +93,9 @@ def change_seat_status(request, pk):
     if not seats.is_occupied:
         seats.is_occupied = True
     return Response(serialseats.data)
+
+
+class PossibleFraudsReservations(viewsets.ReadOnlyModelViewSet):
+    queryset = Reservation.objects.filter(seat__is_occupied=True, is_confirmed=False)
+    serializer_class = ReservationSerializer
+    permission_classes = [IsAuthenticated]
