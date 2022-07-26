@@ -10,7 +10,7 @@ from .serializers import MovieSerializer, PlayingTimeSerializer, \
     PlayingTimeWithDetailsSerializer, ReservationSerializer, HallSerializer, UserReservationSerializer, \
     ChangeReservationSeatStatusSerializer, SeatSerializer
 from django_filters.rest_framework import DjangoFilterBackend
-from .filters import PlayingTimeFilter
+from .filters import PlayingTimeFilter, SeatFilter
 from rest_framework import viewsets, response, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .permissions import Check_API_KEY_Auth
@@ -98,4 +98,6 @@ def change_seat_status(request, pk):
 class SeatsViewSet(viewsets.ModelViewSet):
     serializer_class = SeatSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = SeatFilter
     queryset = Seat.objects.order_by('id')
