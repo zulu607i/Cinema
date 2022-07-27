@@ -18,12 +18,7 @@ response_seats = requests.get(urljoin(base_api_dns, 'seats/'),
 seats = response_seats.json()['results']
 random_nr_of_seats = random.randint(1, len(seats))
 
-for i in seats[0:random_nr_of_seats]:
-    if i['halls'] == halls['id']:
-
-        if not i['is_occupied']:
-            payload = {'is_occupied': True}
-        else:
-            payload = {'is_occupied': False}
-
-        requests.put(urljoin(base_api_dns, f"seats/{i['id']}/"), headers=headers, data=payload)
+for seat in seats[0:random_nr_of_seats]:
+    if seat['halls'] == halls['id']:
+        payload = {'is_occupied': not seat['is_occupied']}
+        requests.put(urljoin(base_api_dns, f"seats/{seat['id']}/"), headers=headers, data=payload)
