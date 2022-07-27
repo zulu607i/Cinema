@@ -58,7 +58,7 @@ class HallSerializer(serializers.ModelSerializer):
 class SeatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seat
-        fields = ['is_occupied', 'seat_name']
+        fields = ['id', 'is_occupied', 'seat_name', 'halls']
 
 
 class MovieSerializer(serializers.ModelSerializer):
