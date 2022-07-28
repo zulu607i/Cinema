@@ -8,9 +8,9 @@ from reservation.models import PlayingTime, Reservation
 from api.utils import get_current_week
 from .serializers import MovieSerializer, PlayingTimeSerializer, \
     PlayingTimeWithDetailsSerializer, ReservationSerializer, HallSerializer, UserReservationSerializer, \
-    ChangeReservationSeatStatusSerializer
+    ChangeReservationSeatStatusSerializer, SeatSerializer
 from django_filters.rest_framework import DjangoFilterBackend
-from .filters import PlayingTimeFilter
+from .filters import PlayingTimeFilter, SeatFilter
 from rest_framework import viewsets, response, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .permissions import Check_API_KEY_Auth
@@ -46,6 +46,7 @@ class MoviesPlayingThisWeekDetailsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = PlayingTime.objects.filter(start_time__range=get_current_week())
     serializer_class = PlayingTimeWithDetailsSerializer
+
 
 
 class PlayingTimeViewSet(viewsets.ModelViewSet):
@@ -93,6 +94,13 @@ def change_seat_status(request, pk):
     if not seats.is_occupied:
         seats.is_occupied = True
     return Response(serialseats.data)
+
+class SeatsViewSet(viewsets.ModelViewSet):
+    serializer_class = SeatSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = SeatFilter
+    queryset = Seat.objects.order_by('id')
 
 
 class PossibleFraudsReservationsViewSet(viewsets.ReadOnlyModelViewSet):
