@@ -96,8 +96,11 @@ def change_seat_status(request, pk):
 
 
 class PossibleFraudsReservationsViewSet(viewsets.ReadOnlyModelViewSet):
-    today = timezone.now()
-    queryset = Reservation.objects.filter(playing_time__start_time__lte=today, playing_time__end_time__gte=today,
-                                          seat__is_occupied=True, is_confirmed=False)
     serializer_class = ReservationSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        today = timezone.now()
+        queryset = Reservation.objects.filter(playing_time__start_time__lte=today, playing_time__end_time__gte=today)
+
+        return queryset
