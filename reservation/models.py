@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db import models
 from movies.models import Movie
 from cinemas.models import *
 from datetime import datetime, timedelta
+from django.utils.functional import cached_property
 # Create your models here.
 
 

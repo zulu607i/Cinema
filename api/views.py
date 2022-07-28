@@ -15,7 +15,7 @@ from rest_framework import viewsets, response, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .permissions import Check_API_KEY_Auth
 from rest_framework.decorators import api_view, permission_classes
-
+from django.utils import timezone
 # Create your views here.
 
 
@@ -101,3 +101,15 @@ class SeatsViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = SeatFilter
     queryset = Seat.objects.order_by('id')
+
+
+class PossibleFraudsReservationsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ReservationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        today = timezone.now()
+        queryset = Reservation.objects.filter(playing_time__start_time__lte=today, playing_time__end_time__gte=today,
+                                              is_confirmed=False, seat__is_occupied=True)
+
+        return queryset
