@@ -15,8 +15,7 @@ from rest_framework import viewsets, response, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .permissions import Check_API_KEY_Auth
 from rest_framework.decorators import api_view, permission_classes
-from django.db.models import F
-import datetime
+from django.utils import timezone
 # Create your views here.
 
 
@@ -97,6 +96,8 @@ def change_seat_status(request, pk):
 
 
 class PossibleFraudsReservationsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Reservation.objects.filter(is_confirmed=False, seat__is_occupied=True, playing_time__start_time__range=[datetime.datetime.today(), F('playing_time__end_time')])
+    today = timezone.now()
+    queryset = Reservation.objects.filter(playing_time__start_time__lte=today, playing_time__end_time__gte=today,
+                                          seat__is_occupied=True, is_confirmed=False)
     serializer_class = ReservationSerializer
     permission_classes = [IsAuthenticated]
