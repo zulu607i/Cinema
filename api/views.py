@@ -101,6 +101,7 @@ class PossibleFraudsReservationsViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         today = timezone.now()
-        queryset = Reservation.objects.filter(playing_time__start_time__lte=today, playing_time__end_time__gte=today)
+        queryset = Reservation.objects.filter(playing_time__start_time__lte=today, playing_time__end_time__gte=today,
+                                              is_confirmed=False, seat__is_occupied=True)
 
         return queryset
