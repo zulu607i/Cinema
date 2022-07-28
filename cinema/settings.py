@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'api',
     "rest_framework.authtoken",
+
 ]
 
 MIDDLEWARE = [
@@ -132,7 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Bucharest'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
