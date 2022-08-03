@@ -29,7 +29,7 @@ class Seat(models.Model):
     is_occupied = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.seat_name} {self.halls.name}'
+        return f'{self.seat_name}'
 
 
 def generate_seat(rows, seats_per_row):

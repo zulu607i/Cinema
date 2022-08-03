@@ -38,8 +38,6 @@
             </div>
             <div class="card-body" style="width: 100%">
                 <h4 class="card-title" style="color: white;">{{ movie.assigned_movie }}</h4>
-                <a href="{% url 'reserve' pk=movie.assigned_movie.pk hall_pk=movie.assigned_hall.pk %}" style="color: grey;">Book a ticket at {{movie.assigned_hall.movie_theater}}
-                    in {{ movie.assigned_hall }} at {{ movie.get_time }}</a>
             </div>
             <div class="card-body" style="width: 50% float:right;">
                 <p class="card-title" style="color: white; float: right;">You can see it in: {{ movie.get_date }}</p><br>

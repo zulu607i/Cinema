@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+        <section class="py-5 border-top-1">
+        <div class="container">
+            <div class="row justify-content-sm-center">
+                    {% for movie in movies %}
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="col-sm-4 mb-3">
+                            <div class="card" style="background-color: black;">
+                                <div class="col-sm-4 align-self-center">
+                                    <br>
+                                    <a href="{% url 'movie_details' pk=movie.pk %}">
+                                        <img src="{{ movie.poster.url }}" class="img-fluid" alt="">
+                                    </a>
+                                </div>
+                                <div class="card-body" style="width: 100%">
+                                    <input type="hidden" id="movie_pk" name="movie_pk" value={{movie.pk}}>
+                                    <h4 class="card-title" style="color: white;">{{ movie.name }}</h4>
+                                </div>
+                                <div class="text-center my-4">
+                                    <button class="btn btn-primary rounded-pill">Select movie</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    {% endfor %}
+                </div>
+            </div>
+    </section>
+
+
+{% endblock %}
