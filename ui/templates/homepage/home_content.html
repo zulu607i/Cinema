@@ -32,15 +32,12 @@
          <div class="card" style="background-color: black;">
             <div class="col-sm-4 align-self-center">
                 <br>
-                <a href="{% url 'movie_details' pk=movie.assigned_movie.pk %}">
-                    <img src="{{ movie.assigned_movie.poster.url }}" class="img-fluid" alt="">
+                <a href="{% url 'movie_details' pk=movie.pk %}">
+                    <img src="{{ movie.poster }}" class="img-fluid" alt="">
                 </a>
             </div>
             <div class="card-body" style="width: 100%">
-                <h4 class="card-title" style="color: white;">{{ movie.assigned_movie }}</h4>
-            </div>
-            <div class="card-body" style="width: 50% float:right;">
-                <p class="card-title" style="color: white; float: right;">You can see it in: {{ movie.get_date }}</p><br>
+                <h4 class="card-title" style="color: white;">{{ movie.name }}</h4>
             </div>
         </div>
       </div>
