@@ -79,12 +79,12 @@ def select_playing_time(request, movie_pk, cinema_pk):
 @login_required()
 @ratelimit(key="ip", rate="30/m", block=True)
 def select_seats(request, pk):
+    playing_time = PlayingTime.objects.get(pk=pk)
     if request.method == "GET":
-        reservations = Reservation.objects.filter(
-            playing_time=PlayingTime.objects.get(pk=pk)
-        )
-        reserved_seats = [item.seat.seat_name for item in reservations]
-        seats = Seat.objects.filter(halls=PlayingTime.objects.get(pk=pk).assigned_hall.id).order_by('seat_name')
+        reserved_seats = Reservation.objects.filter(
+            playing_time_id=pk
+        ).values_list('seat__seat_name', flat=True)
+        seats = Seat.objects.filter(halls=playing_time.assigned_hall.id).order_by('seat_name')
         return render(
             request,
             "reservation/select_seats.html",
@@ -96,15 +96,12 @@ def select_seats(request, pk):
 
     if request.method == "POST":
         seats = request.POST.getlist("seats")
-        playing_time = PlayingTime.objects.get(pk=pk)
         user = User.objects.get(username=request.user)
         reservations = []
         for seat in seats:
             reservations.append(
                 Reservation(
-                    seat=Seat.objects.get(
-                        pk=seat,
-                    ),
+                    seat_id=seat,
                     user=user,
                     playing_time=playing_time,
                 )
@@ -116,17 +113,6 @@ def select_seats(request, pk):
                 ).values_list("id", flat=True)
             )
             Reservation.objects.bulk_create(reservations)
-            new_ids = list(
-                Reservation.objects.exclude(id__in=existing_ids).values_list(
-                    "id", flat=True
-                ).filter(user=user, playing_time=playing_time)
-            )
-            ids_string = [str(res_id) for res_id in new_ids]
-            encoded_ids = urlsafe_base64_encode(force_bytes(ids_string))
-        except IntegrityError:
-            messages.success(request, f"Seat {seats} is already reserved")
-            return redirect(request.path)
-        else:
             new_ids = list(
                 Reservation.objects.exclude(id__in=existing_ids).values_list(
                     "id", flat=True
@@ -155,6 +141,10 @@ def select_seats(request, pk):
                 EMAIL_HOST_USER,
                 [user.email],
             )
+        except IntegrityError:
+            messages.success(request, f"Seat {seats} is already reserved")
+            return redirect(request.path)
+
         return redirect("home")
 
 
