@@ -1,49 +1,28 @@
 {% block content %}
-<section class="page-search">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<!-- Advance Search -->
-				<div class="advance-search">
-					<form>
-						<div class="form-row">
-							<div class="form-group col-md-4">
-								{{ filter.form.assigned_hall}}
-							</div>
-							<div class="form-group col-md-4">
-								{{ filter.form.assigned_movie}}
-							</div>
-							<div class="form-group col-4">
-								<button type="submit" class="btn btn-primary">Search Now</button>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
 <section class="py-5 border-top-1">
-  <div class="container">
-  <div class="row justify-content-sm-center">
-      <div class="row">
-      {% for movie in movies %}
-      <div class="col-sm-4 mb-3">
-         <div class="card" style="background-color: black;">
-            <div class="col-sm-4 align-self-center">
-                <br>
-                <a href="{% url 'movie_details' pk=movie.pk %}">
-                    <img src="{{ movie.poster }}" class="img-fluid" alt="">
-                </a>
-            </div>
-            <div class="card-body" style="width: 100%">
-                <h4 class="card-title" style="color: white;">{{ movie.name }}</h4>
+    <div class="container">
+        <div class="row justify-content-sm-center">
+            <div class="row">
+                <div class="text-center mb-3" style="color: white;">
+                    <h2> Movies playing this week!</h2>
+                </div>
+            {% for movie in movies %}
+                <div class="col-sm-3 mb-2">
+                    <a href="{% url 'movie_details' pk=movie.pk %}">
+                        <div class="card">
+                            <div class="img-container align-self-center">
+                                <img src="{{ movie.poster }}" class="img-fluid" alt="">
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">{{ movie.name }}</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
             </div>
         </div>
-      </div>
-      {% endfor %}
-      </div>
-    </div>
+
         {% include 'homepage/partials/pagination.html' %}
   </div>
 

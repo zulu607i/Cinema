@@ -53,9 +53,12 @@ def select_cinema(request):
 
 def select_movie(request, cinema_pk):
     if request.method == "GET":
-        movies_playing_time = PlayingTime.objects.filter(assigned_hall__in=Hall.objects.filter(movie_theater=cinema_pk), start_time__range=get_current_week())
+        movies_playing_time = PlayingTime.objects.filter(assigned_hall__in=Hall.objects.filter(
+            movie_theater=cinema_pk),
+            start_time__range=get_current_week()).distinct('assigned_movie')
+
         if movies_playing_time:
-            movies = [pt.assigned_movie for pt in movies_playing_time] # (pt -> playing_time)
+            movies = [pt.assigned_movie for pt in movies_playing_time]  # (pt -> playing_time)
         else:
             movies = []
 
@@ -113,38 +116,39 @@ def select_seats(request, pk):
                 ).values_list("id", flat=True)
             )
             Reservation.objects.bulk_create(reservations)
-            new_ids = list(
-                Reservation.objects.exclude(id__in=existing_ids).values_list(
-                    "id", flat=True
-                ).filter(user=user, playing_time=playing_time)
-            )
-            ids_string = ",".join([str(res_id) for res_id in new_ids])
-            encoded_ids = urlsafe_base64_encode(force_bytes(ids_string))
-            email_subject = f"Your booking for: {playing_time.assigned_movie.name} was completed successfully"
-            current_site = get_current_site(request)
-            seats_names = " ".join(seats)
-            email_message = render_to_string(
-                "reservation/booking_email.html",
-                {
-                    "user": user,
-                    "domain": current_site.domain,
-                    "uid": encoded_ids,
-                    "seats": seats_names,
-                    "hall_name": playing_time.assigned_hall.name,
-                    "movie_name": playing_time.assigned_movie.name,
-                },
-            )
 
-            send_mail(
-                email_subject,
-                email_message,
-                EMAIL_HOST_USER,
-                [user.email],
-            )
         except IntegrityError:
             messages.success(request, f"Seat {seats} is already reserved")
             return redirect(request.path)
 
+        new_ids = list(
+            Reservation.objects.exclude(id__in=existing_ids).values_list(
+                "id", flat=True
+            ).filter(user=user, playing_time=playing_time)
+        )
+        ids_string = ",".join([str(res_id) for res_id in new_ids])
+        encoded_ids = urlsafe_base64_encode(force_bytes(ids_string))
+        email_subject = f"Your booking for: {playing_time.assigned_movie.name} was completed successfully"
+        current_site = get_current_site(request)
+        seats_names = " ".join(seats)
+        email_message = render_to_string(
+            "reservation/booking_email.html",
+            {
+                "user": user,
+                "domain": current_site.domain,
+                "uid": encoded_ids,
+                "seats": seats_names,
+                "hall_name": playing_time.assigned_hall.name,
+                "movie_name": playing_time.assigned_movie.name,
+            },
+        )
+
+        send_mail(
+            email_subject,
+            email_message,
+            EMAIL_HOST_USER,
+            [user.email],
+        )
         return redirect("home")
 
 

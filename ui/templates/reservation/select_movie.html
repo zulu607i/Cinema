@@ -1,24 +1,23 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
         <section class="py-5 border-top-1">
         <div class="container">
             <div class="row justify-content-sm-center">
+                <div class="col-lg-12 align-item-center" style="display: flex;
+    justify-content: space-evenly;">
                     {% for movie in movies %}
                     <form action="" method="POST">
                         {% csrf_token %}
-                        <div class="col-sm-4 mb-3">
+                        <div class="row">
                             <div class="card" style="background-color: black;">
-                                <div class="col-sm-4 align-self-center">
                                     <br>
                                     <a href="{% url 'movie_details' pk=movie.pk %}">
-                                        <img src="{{ movie.poster.url }}" class="img-fluid" alt="">
+                                        <img src="{{ movie.poster }}" class="img-fluid" alt="">
                                     </a>
-                                </div>
-                                <div class="card-body" style="width: 100%">
+                                <div class="card-body">
                                     <input type="hidden" id="movie_pk" name="movie_pk" value={{movie.pk}}>
-                                    <h4 class="card-title" style="color: white;">{{ movie.name }}</h4>
-                                </div>
-                                <div class="text-center my-4">
+                                    <p class="card-title" style="font-size: 12px">{{ movie.name }}</p>
                                     <button class="btn btn-primary rounded-pill">Select movie</button>
                                 </div>
                             </div>
@@ -26,6 +25,7 @@
                     </form>
                     {% endfor %}
                 </div>
+            </div>
             </div>
     </section>
 
