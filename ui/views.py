@@ -2,6 +2,7 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 
+from api.utils import get_current_week
 from movies.models import Movie
 from reservation.models import PlayingTime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -15,7 +16,11 @@ from reservation.filters import PlayingTimeFilter
 
 @ratelimit(key="ip", rate="30/m", block=True)
 def homepage(request):
-    playing_movies = PlayingTime.objects.all()
+    playing_movies = Movie.objects.filter(
+        pk__in=PlayingTime.objects.filter(
+            start_time__range=get_current_week()
+        ).values_list("assigned_movie", flat=True)
+    )
     filter = PlayingTimeFilter(request.GET, queryset=PlayingTime.objects.all())
     paginator = Paginator(playing_movies, 10)
     page = request.GET.get("page", 1)

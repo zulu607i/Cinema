@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="py-5 border-top-1">
+    <div class="container">
+        <form action="" method="POST">
+            <div class="row justify-content-sm-center">
+                <div class="col-lg-6 align-item-center" style="display: flex; justify-content: space-evenly;">
+                    {% csrf_token %}
+                    {% for seat in seats %}
+                    <p class="row">
+                         <label style="color: white" for={{seat}}>{{seat}}</label>
+                        <input type="checkbox" id="{{seat}}" name="seats" value="{{seat.pk}}" id="{{seat}}"/>
+                    </p>
+                    {%endfor%}
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+            <button class="btn btn-primary rounded-pill">Select seat</button>
+            </div>
+        </form>
+         {% if messages %}
+        {% for msg in messages %}
+            <div class="alert alert-danger alert-dismissable text-center">
+                <button type="button">
+                    <i class="fa fa-exclamation-circle"></i>
+                </button>
+                {{msg.message}}
+            </div>
+        {% endfor %}
+    {% endif %}
+    </div>
+</section>
+
+
+{% endblock %}

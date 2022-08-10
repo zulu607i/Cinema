@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section class="login py-5 border-top-1">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-6 align-item-center" style="display: flex;
+    justify-content: space-evenly;">
+                    {%for cinema in cinemas%}
+                    <form action="" method="POST">
+                        {%csrf_token%} {{form.as_p}}
+                            <div class="card align-item-center">
+                                <div class="text-center">
+                                    <span class="cinema-name">{{cinema.name}}</span>
+                                    <span class="cinema-name">{{cinema.city}}</span>
+                                </div>
+                                <div class="text-center my-4">
+                                    <a href="{% url 'select_movie' cinema_pk=cinema.pk %}" class="btn btn-primary rounded-pill">Select cinema</a>
+                                </div>
+                            </div>
+                        <br>
+                    </form>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+</section>
+{% endblock %}
