@@ -6,26 +6,43 @@
                 <div class="text-center mb-3" style="color: white;">
                     <h2> Movies playing this week!</h2>
                 </div>
-            {% for movie in movies %}
-                <div class="col-sm-3 mb-2">
-                    <a href="{% url 'movie_details' pk=movie.pk %}">
-                        <div class="card">
-                            <div class="img-container align-self-center">
-                                <img src="{{ movie.poster }}" class="img-fluid" alt="">
+                <div class="owl-carousel owl-theme">
+                {% for movie in movies %}
+                    <div class="item">
+                        <a href="{% url 'movie_details' pk=movie.pk %}">
+                            <div class="card">
+                                <div class="img-container align-self-center">
+                                    <img src="{{ movie.poster }}" class="img-fluid" alt="">
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="card-title">{{ movie.name }}</h4>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <h4 class="card-title">{{ movie.name }}</h4>
-                            </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
+                {% endfor %}
                 </div>
-            {% endfor %}
+                <div class="text-center mb-3" style="color: white;">
+                    <h2> Movies playing next week!</h2>
+                </div>
+                <div class="owl-carousel owl-theme">
+                {% for movie in playing_movies_next_week %}
+                    <div class="item">
+                        <a href="{% url 'movie_details' pk=movie.pk %}">
+                            <div class="card">
+                                <div class="img-container align-self-center">
+                                    <img src="{{ movie.poster }}" class="img-fluid" alt="">
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="card-title">{{ movie.name }}</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+                </div>
             </div>
         </div>
-
-        {% include 'homepage/partials/pagination.html' %}
-  </div>
-
+    </div>
 </section>
-
 {% endblock %}

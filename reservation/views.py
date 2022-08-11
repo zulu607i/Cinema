@@ -29,15 +29,15 @@ def get_csv_file(request):
         writer = csv.writer(response)
         writer.writerow(['ID', 'User', 'Hall', 'Movie', 'Seat', 'Start time'])
         for r in reservations:
-
-            writer.writerow([r.pk,
-                             r.user,
-                             r.playing_time.assigned_hall,
-                             r.playing_time.assigned_movie,
-                             r.seat,
-                             r.playing_time.start_time,
-                             r.is_confirmed,
-                             ])
+            if r.is_confirmed:
+                writer.writerow([r.pk,
+                                 r.user,
+                                 r.playing_time.assigned_hall,
+                                 r.playing_time.assigned_movie,
+                                 r.seat,
+                                 r.playing_time.start_time,
+                                 r.is_confirmed,
+                                 ])
 
         return response
 
