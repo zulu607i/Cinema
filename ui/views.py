@@ -4,43 +4,34 @@ from django.views.generic import DetailView
 
 from api.utils import get_current_week, get_next_week
 from movies.models import Movie
-from reservation.models import PlayingTime
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import *
 from cinema.settings import EMAIL_HOST_USER, EMAIL_HOST, EMAIL_HOST_PASSWORD
 from cinema.settings import EMAIL_HOST_USER
 from ratelimit.decorators import ratelimit
-from reservation.filters import PlayingTimeFilter
 # Create your views here.
 
 
 @ratelimit(key="ip", rate="30/m", block=True)
 def homepage(request):
-    playing_movies = Movie.objects.filter(
-        pk__in=PlayingTime.objects.filter(
-            start_time__range=get_current_week()
-        ).values_list("assigned_movie", flat=True)
-    )
+    playing_movies_this_week = Movie.objects.filter(playingtime__start_time__range=get_current_week())
 
-    playing_movies_next_week = Movie.objects.filter(
-        pk__in=PlayingTime.objects.filter(
-            start_time__range=get_next_week()
-        ).values_list("assigned_movie", flat=True)
-    )
-    print(playing_movies_next_week)
-    filter = PlayingTimeFilter(request.GET, queryset=PlayingTime.objects.all())
-    paginator = Paginator(playing_movies, 10)
-    page = request.GET.get("page", 1)
+    playing_movies_next_week = Movie.objects.filter(playingtime__start_time__range=get_next_week())
 
-    try:
-        movies_paginated = paginator.get_page(page)
-    except PageNotAnInteger:
-        movies_paginated = paginator.page(1)
-    except EmptyPage:
-        movies_paginated = paginator.page(paginator.num_pages)
-    return render(request, "base.html", {"movies": movies_paginated,
-                                         "playing_movies_next_week": playing_movies_next_week,
-                                         "filter": filter})
+    # paginator = Paginator(playing_movies_this_week, 10)
+    # page = request.GET.get("page", 1)
+    #
+    # try:
+    #     movies_paginated = paginator.get_page(page)
+    # except PageNotAnInteger:
+    #     movies_paginated = paginator.page(1)
+    # except EmptyPage:
+    #     movies_paginated = paginator.page(paginator.num_pages)
+
+    return render(request, "homepage/home_content.html",
+                  {"movies": playing_movies_this_week,
+                   "playing_movies_next_week": playing_movies_next_week,
+                   })
 
 
 @ratelimit(key="ip", rate="30/m", block=True)
@@ -56,12 +47,17 @@ def contact_form(request):
                         f'Cinema: {contact.cinema} \n' \
                         f'Message: {contact.message}'
         send_mail(
-            contact.subject, email_message, from_email=EMAIL_HOST_USER, recipient_list=[EMAIL_HOST_USER], auth_user=EMAIL_HOST_USER,
-    auth_password=EMAIL_HOST_PASSWORD,
+            contact.subject,
+            email_message,
+            from_email=EMAIL_HOST_USER,
+            recipient_list=[EMAIL_HOST_USER],
+            auth_user=EMAIL_HOST_USER,
+            auth_password=EMAIL_HOST_PASSWORD,
         )
         return redirect('home')
 
     return render(request, 'contact_form.html', {'form': form})
+
 
 class MovieDetailView(DetailView):
     model = Movie

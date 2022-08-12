@@ -21,23 +21,22 @@ from ratelimit.decorators import ratelimit
 @login_required()
 @ratelimit(key="ip", rate="30/m", block=True)
 def get_csv_file(request):
-    reservations = Reservation.objects.filter(user=request.user)
+    reservations = Reservation.objects.filter(user=request.user, expired=False)
     if request.method == "POST":
         response = HttpResponse(content_type='text/csv')
         filename = f'{request.user}-reservations'
         response['Content=-Disposition'] = f'attachment; filename={filename}.csv'
         writer = csv.writer(response)
-        writer.writerow(['ID', 'User', 'Hall', 'Movie', 'Seat', 'Start time'])
+        writer.writerow(['ID', 'User', 'Hall', 'Movie', 'Seat', 'Start time', 'Confirmed'])
         for r in reservations:
-            if r.is_confirmed:
-                writer.writerow([r.pk,
-                                 r.user,
-                                 r.playing_time.assigned_hall,
-                                 r.playing_time.assigned_movie,
-                                 r.seat,
-                                 r.playing_time.start_time,
-                                 r.is_confirmed,
-                                 ])
+            writer.writerow([r.pk,
+                             r.user,
+                             r.playing_time.assigned_hall,
+                             r.playing_time.assigned_movie,
+                             r.seat,
+                             r.playing_time.start_time,
+                             r.is_confirmed,
+                             ])
 
         return response
 
