@@ -22,6 +22,7 @@
     </thead>
     <tbody>
     {% for r in reservations %}
+        {% if r.is_confirmed %}
         <tr style="color: white; background: black;">
             <th scope="row">{{r.id}}</th>
             <td>{{r.user }}</td>
@@ -31,6 +32,7 @@
             <td>{{ r.seat.seat_name}} </td>
              <td>{{ r.is_confirmed}} </td>
         </tr>
+    {% endif %}
     {% endfor %}
     </tbody>
 </table>

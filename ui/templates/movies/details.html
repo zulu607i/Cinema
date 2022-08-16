@@ -9,7 +9,6 @@
                 <h5>{{ movie.name }}</h5>
                 <p class="mb-0">{{ movie.description }}</p>
             </div><!-- / project-info-box -->
-            <a href="{% url 'select_cinema' %}" style="color: grey;">Book a ticket</a>
             <div class="project-info-box text-white">
                 <p><b>Length:</b> {{movie.length_min}} min</p>
                 <p><b>IMDB:</b> <a style="color:white" href="{{movie.get_imdb_url}}"><i class="fa-brands fa-imdb"></i></a></p>

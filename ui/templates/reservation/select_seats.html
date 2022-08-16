@@ -5,14 +5,22 @@
     <div class="container">
         <form action="" method="POST">
             <div class="row justify-content-sm-center">
-                <div class="col-lg-6 align-item-center" style="display: flex; justify-content: space-evenly;">
                     {% csrf_token %}
-                    {% for seat in seats %}
-                    <p class="row">
-                         <label style="color: white" for={{seat}}>{{seat}}</label>
-                        <input type="checkbox" id="{{seat}}" name="seats" value="{{seat.pk}}" id="{{seat}}"/>
-                    </p>
-                    {%endfor%}
+                <div class="plane">
+                    <div class="cockpit">
+                        <h1 style="color: #fff">Please select your seats</h1>
+                    </div>
+                    <div class="exit exit--front fuselage"></div>
+                    <ol class="cabin fuselage">
+                        <div class="row" style="padding:5px;">
+                           {% for seat in seats %}
+                                <li class="col-sm-2">
+                                    <label style="color: white" for={{seat}}>{{seat}}</label>
+                                    <input type="checkbox" id="{{seat}}" name="seats" value="{{seat.pk}}" id="{{seat}}"/>
+                                </li>
+                            {%endfor%}
+                        </div>
+                    </ol>
                 </div>
             </div>
             <div class="col-md-12 text-center">
