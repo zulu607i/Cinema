@@ -106,6 +106,11 @@ DATABASES = {
 DATABASE_URL = os.environ.get('DATABASE_URL')
 db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env)
+### POSTGRES-HEROKU
+DB_HOST = os.environ.get('DB_HOST')
+DB_USER = os.environ.get('DB_USER')
+DB_DATABASE = os.environ.get('DB_DATABASE')
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
