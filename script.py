@@ -3,11 +3,12 @@
 import psycopg2
 import requests
 from bs4 import BeautifulSoup
-from cinema.settings import DB_HOST, DB_USER, DB_DATABASE, DB_PASSWORD
-
+import urllib.parse as urlparse
+import os
 
 def connect():
-    conn = psycopg2.connect(host=DB_HOST, user=DB_USER, database=DB_DATABASE, password=DB_PASSWORD)
+    url = urlparse.urlparse(os.environ['DATABASE_URL'])
+    conn = psycopg2.connect(dbname=url.path[1:], user=url.username, host=url.hostname, password=url.password, port=url.port)
     cur = conn.cursor()
     cur.execute("SELECT description, imdb_id FROM public.movies_movie WHERE movies_movie.description='';")
     update_query = "UPDATE public.movies_movie SET description=%s, poster=%s WHERE movies_movie.imdb_id=%s;"
