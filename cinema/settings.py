@@ -202,4 +202,4 @@ SWAGGER_SETTINGS = {
    }
 }
 
-API_SECRET_KEY = env('API_KEY')
+API_SECRET_KEY = os.environ.get('API_SECRET_KEY')
