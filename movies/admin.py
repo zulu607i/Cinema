@@ -39,7 +39,7 @@ class MovieAdmin(admin.ModelAdmin):
     def import_movies(self, request):
         form = CsvForm(request.POST, request.FILES)
         if form.is_valid():
-            csv_file = TextIOWrapper(request.FILES['csv_file'], encoding=request.encoding)
+            csv_file = TextIOWrapper(request.FILES['csv_file'], encoding='utf-8')
             movies = csv.DictReader(csv_file)
             added_movies = []
             updated_movies = []
