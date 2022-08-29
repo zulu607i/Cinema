@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', default='foo')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DEBUG', default=False)
 
 ALLOWED_HOSTS = ['staging-cinema.herokuapp.com']
 CSRF_TRUSTED_ORIGINS = ['https://staging-cinema.herokuapp.com']
