@@ -47,13 +47,13 @@ class MovieAdmin(admin.ModelAdmin):
             for movie in movies:
                 created_movie = Movie(**movie)
                 try:
-                    name = movie["poster"].split("/")[-1]
-                    response = requests.get(created_movie.poster)
+                    # name = movie["poster"].split("/")[-1]
+                    # response = requests.get(created_movie.poster)
 
-                    if response.status_code == 200:
-                        created_movie.poster.save(
-                            name, ContentFile(response.content), save=False
-                        )
+                    # if response.status_code == 200:
+                    #     created_movie.poster.save(
+                    #         name, ContentFile(response.content), save=False
+                    #     )
                     if int(movie['pk']) not in system_list:
                         added_movies.append(Movie(**movie))
                     elif int(movie['pk']) in system_list:
