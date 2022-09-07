@@ -25,7 +25,7 @@ def get_csv_file(request):
     if request.method == "POST":
         response = HttpResponse(content_type='text/csv')
         filename = f'{request.user}-reservations'
-        response['Content=-Disposition'] = f'attachment; filename={filename}.csv'
+        response['Content-Disposition'] = f'attachment; filename={filename}.csv'
         writer = csv.writer(response)
         writer.writerow(['ID', 'User', 'Hall', 'Movie', 'Seat', 'Start time', 'Confirmed'])
         for r in reservations:
