@@ -2,9 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.functional import cached_property
 from cinema import settings as base_settings
-from django.core.files.uploadedfile import SimpleUploadedFile
 from PIL import Image
-import io
+from django.core.files.storage import default_storage
 import os
 
 # Create your models here.
@@ -28,24 +27,15 @@ class Movie(models.Model):
         return f'{base_settings.IMDB_URL}{self.imdb_id}'
 
     def save(self, *args, **kwargs):
-        super(Movie, self).save(*args, **kwargs)
         img = Image.open(self.poster.path)
-        output_size_small = base_settings.POSTER_SIZES['small']
-        output_size_large = base_settings.POSTER_SIZES['large']
-        output_size_medium = base_settings.POSTER_SIZES['medium']
         image_name, image_extension = os.path.splitext(self.poster.path)
+        try:
+            for size in base_settings.POSTER_SIZES:
+                img.thumbnail(base_settings.POSTER_SIZES[size])
+                custom_path = f'{image_name}_{base_settings.POSTER_SIZES[size][0]}{image_extension}'
+                img.save(custom_path)
 
-        """ Large image """
-        img.thumbnail(output_size_large)
-        custom_path_large = f'{image_name}_{output_size_large[0]}{image_extension}'
-        img.save(custom_path_large)
+        except IOError:
+            print("Cannot create thumbnail for", self.poster.name)
 
-        """ Medium Image"""
-        img.thumbnail(output_size_medium)
-        custom_path_medium = f'{image_name}_{output_size_medium[0]}{image_extension}'
-        img.save(custom_path_medium)
-
-        """Small Image """
-        img.thumbnail(output_size_small)
-        custom_path_small = f'{image_name}_{output_size_small[0]}{image_extension}'
-        img.save(custom_path_small)
+        super(Movie, self).save(*args, **kwargs)

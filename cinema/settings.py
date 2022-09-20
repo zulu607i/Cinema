@@ -198,8 +198,8 @@ SWAGGER_SETTINGS = {
    }
 }
 POSTER_SIZES = {
-    'small': (128, 128),
-    'medium': (256, 256),
     'large': (512, 512),
+    'medium': (256, 256),
+    'small': (128, 128),
 }
 API_SECRET_KEY = env('API_KEY')
