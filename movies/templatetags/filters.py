@@ -1,11 +1,12 @@
 from django import template
+import pathlib
+from cinema import settings
 register = template.Library()
 
 @register.filter
 def get_thumbnail(image_url, size):
-    img_name = image_url.split('/')[2]
-    thumb_name = f"{img_name.split('.')[0]}_{size}.{img_name.split('.')[1]}"
-    new_url = image_url.replace(img_name, thumb_name)
-    return new_url
+    img_name = pathlib.Path(image_url)
+    thumb_name = f"{settings.MEDIA_URL}{img_name.stem}_{size}{img_name.suffix}"
+    return thumb_name
 
 
