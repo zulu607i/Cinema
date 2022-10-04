@@ -33,8 +33,8 @@ class Movie(models.Model):
 
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         try:
+            super(Movie, self).save(force_update=True, *args, **kwargs)
             for size_name, size in base_settings.POSTER_SIZES.items():
-                super(Movie, self).save(force_update=True, *args, **kwargs)
                 img = Image.open(self.poster.path)
                 image_name, image_extension = os.path.splitext(self.poster.path)
                 img.thumbnail(size)
