@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load filters %}
 {% block content %}
 <section class="py-5 border-top-1">
     <div class="container">
@@ -14,7 +15,7 @@
                         <a href="{% url 'movie_details' pk=movie.pk %}">
                             <div class="card">
                                 <div class="img-container align-self-center">
-                                    <img src="{{ movie.poster }}" class="img-fluid" alt="">
+                                    <img src="{{ movie.poster.url|get_thumbnail:128 }}" class="img-fluid" alt="">
                                 </div>
                                 <div class="card-body">
                                     <h4 class="card-title">{{ movie.name }}</h4>
@@ -33,7 +34,7 @@
                         <a href="{% url 'movie_details' pk=movie.pk %}">
                             <div class="card">
                                 <div class="img-container align-self-center">
-                                    <img src="{{ movie.poster }}" class="img-fluid" alt="">
+                                    <img src="{{ movie.poster.url }}" class="img-fluid" alt="">
                                 </div>
                                 <div class="card-body">
                                     <h4 class="card-title">{{ movie.name }}</h4>

@@ -162,7 +162,7 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
 
 IMDB_URL = 'https://www.imdb.com/title/'
 
-MEDIA_URL = '/media/images/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LOGIN_URL = 'login'
@@ -197,5 +197,9 @@ SWAGGER_SETTINGS = {
 }
    }
 }
-
+POSTER_SIZES = {
+    'large': (512, 512),
+    'medium': (256, 256),
+    'small': (128, 128),
+}
 API_SECRET_KEY = env('API_KEY')
