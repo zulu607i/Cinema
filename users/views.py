@@ -123,6 +123,6 @@ def pre_register(request):
                       [email]
                       )
             messages.success(request, 'Please check your email to continue the registration')
-            return redirect('home')
+            return redirect('pre_register')
 
     return render(request, 'users/partials/pre_register.html')
