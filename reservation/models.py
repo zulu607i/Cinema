@@ -56,10 +56,11 @@ class Reservation(models.Model):
     playing_time = models.ForeignKey(PlayingTime, null=True, on_delete=models.CASCADE, verbose_name='Cinema/Hall/Date')
     is_confirmed = models.BooleanField(default=False)
     expired = models.BooleanField(default=False)
+    price = models.FloatField(default=20.0)
+    stripe_price_id = models.CharField(default='price_1LptmkGMvPFpBlyfXSbzeFXF', max_length=500)
 
     class Meta:
         unique_together = ['playing_time', 'seat']
 
-
     def __str__(self):
-        return f'{self.user}/ {self.seat}/'
+        return f'{self.playing_time}/ {self.seat}/'

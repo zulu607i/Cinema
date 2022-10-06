@@ -203,3 +203,6 @@ SWAGGER_SETTINGS = {
 }
 
 API_SECRET_KEY = os.environ.get('API_SECRET_KEY')
+
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+DOMAIN = os.environ.get('DOMAIN')
