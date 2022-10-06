@@ -14,8 +14,7 @@
            {% for r in reservations %}
             <div class="product">
                 <div class="description" style="color:white; margin-bottom: 60px;" >
-                        {% if not r.is_confirmed %}
-                        <h3>{{ r }}</h3>
+                    <h3>{{ r }}</h3>
                     <div>
                         <h5>{{ r.price }} Lei</h5>
                             <form action="{% url 'create-checkout-session' r.id %}" method="POST">
@@ -24,9 +23,6 @@
                             </form>
                     </div>
                     <hr />
-
-                    {% endif %}
-
                 </div>
                {% endfor %}
             </div>
