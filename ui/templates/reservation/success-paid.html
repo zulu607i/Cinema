@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="login py-5 border-top-1">
+    <div class="container-xxl">
+        <div class="row justify-content-center" style="margin-bottom: 251.5px">
+            <h2 style="color: white;">
+                Thank you for purchasing our ticket. See you at the Cinema. Enjoy!
+                <br>
+                <a style="color:white; hover:none;" href="mailto:orders@example.com">support@cinema.com</a>.
+            </h2>
+            <a  style="color:white; hover:none;" href="{% url 'landing' %}">Back to your unpaid reservations!</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

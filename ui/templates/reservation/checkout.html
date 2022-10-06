@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+<head>
+    <title>Buy now</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+{% block content %}
+<section class="login py-5 border-top-1">
+    <div class="container-xxl">
+        <div class="row justify-content-center">
+           {% for r in reservations %}
+            <div class="product">
+                <div class="description" style="color:white; margin-bottom: 60px;" >
+                    <h3>{{ r }}</h3>
+                    <div>
+                        <h5>{{ r.price }} Lei</h5>
+                            <form action="{% url 'create-checkout-session' r.id %}" method="POST">
+                            {% csrf_token %}
+                                <button type="submit">Checkout</button>
+                            </form>
+                    </div>
+                    <hr />
+                </div>
+               {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
