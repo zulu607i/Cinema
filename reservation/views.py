@@ -4,11 +4,14 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.db import IntegrityError
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode
+from django.views import View
+from django.views.generic import TemplateView
+
 from api.utils import get_current_week
 from reservation.models import Reservation, PlayingTime
 from cinema.settings import EMAIL_HOST_USER
@@ -16,8 +19,10 @@ from django.contrib.auth.decorators import login_required
 from cinemas.models import Hall, MovieTheater, Seat
 import csv
 from ratelimit.decorators import ratelimit
+import stripe
+from cinema.settings import STRIPE_SECRET_KEY, DOMAIN
 # Create your views here.
-
+stripe.api_key = STRIPE_SECRET_KEY
 @login_required()
 @ratelimit(key="ip", rate="30/m", block=True)
 def get_csv_file(request):
@@ -150,6 +155,50 @@ def select_seats(request, pk):
         )
         return redirect("home")
 
+
+class ReservationLandingPageView(TemplateView):
+    template_name = 'reservation/checkout.html'
+
+    def get_context_data(self, **kwargs):
+        reservations = Reservation.objects.filter(user=self.request.user)
+        context = super(ReservationLandingPageView, self).get_context_data(**kwargs)
+        context.update({
+            'reservations': reservations
+        })
+        return context
+
+
+class CreateCheckoutSessionView(View):
+    def post(self, request, *args, **kwargs):
+        reservation = Reservation.objects.get(id=self.kwargs["pk"])
+        encoded_ids = urlsafe_base64_encode(force_bytes(reservation.pk))
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': reservation.stripe_price_id,
+                    'quantity': 1,
+                },
+            ],
+
+            mode='payment',
+
+            success_url=DOMAIN + f'reservations/successfully-paid/{encoded_ids}',
+            cancel_url=DOMAIN,
+        )
+
+        return redirect(checkout_session.url)
+
+
+class SuccessPaidView(TemplateView):
+    template_name = "reservation/success-paid.html"
+
+    def get_context_data(self, uidb64,  **kwargs):
+        res_id = urlsafe_b64decode(uidb64)
+        Reservation.objects.filter(id=res_id).update(is_confirmed=True)
+        context = super(SuccessPaidView, self).get_context_data(**kwargs)
+
+        return context
 
 @login_required()
 @ratelimit(key="ip", rate="30/m", block=True)
