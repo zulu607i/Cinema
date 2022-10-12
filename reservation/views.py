@@ -5,7 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode
@@ -171,7 +171,7 @@ class ReservationLandingPageView(TemplateView):
 
 class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
-        reservation = Reservation.objects.get(id=self.kwargs["pk"])
+        reservation = get_object_or_404(Reservation, id=self.kwargs["pk"])
         encoded_ids = urlsafe_base64_encode(force_bytes(reservation.pk))
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
